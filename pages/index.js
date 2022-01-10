@@ -83,7 +83,6 @@ export default function Home() {
     }
     let property = {
       hostUserUuid: "acc647e9-b9f4-4014-8b6c-f2ef8fcd257c",
-      addressUuid: "acc647e9-b9f4-4014-8b6c-f2ef8fcd257c",
       title: title,
       guestLimit: guestLimit,
       description: description,
@@ -101,18 +100,18 @@ export default function Home() {
     // console.log(data);
     setAddressRow(data);
     // console.log(AddressHandler.getAddress(addressRow));
-    
   };
   return (
     <div>
       <Header />
       <main>
+        <div className="p-6 rounded-lg shadow-lg bg-white max-w-4xl mx-auto">
         <form method="POST" className="relative" onSubmit={handleOnSubmit}>
           <div className="form-group">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title" className="form-label inline-block mb-2 text-gray-700">Title</label>
             <input
               placeholder="Enter Title"
-              className="form-control"
+              className="form-control inputs"
               name="title"
               type="text"
               autoComplete="title"
@@ -125,7 +124,7 @@ export default function Home() {
             <label htmlFor="guestLimit">Max Guest</label>
             <input
               placeholder="Enter Guest Number"
-              className="form-control"
+              className="form-control inputs"
               name="guestLimit"
               type="number"
               autoComplete="guestLimit"
@@ -138,7 +137,7 @@ export default function Home() {
             <label htmlFor="contact_person">Contact Person</label>
             <input
               placeholder="Enter Contact Person"
-              className="form-control"
+              className="form-control inputs"
               name="contact_person"
               type="text"
               autoComplete="contact_person"
@@ -151,7 +150,7 @@ export default function Home() {
             <label htmlFor="email">Email</label>
             <input
               placeholder="Enter Email"
-              className="form-control"
+              className="form-control inputs"
               name="email"
               type="email"
               autoComplete="email"
@@ -164,7 +163,7 @@ export default function Home() {
             <label htmlFor="description">Description</label>
             <textarea
               placeholder="Enter Description"
-              className="form-control"
+              className="form-control inputs mb-1"
               name="description"
               type="text"
               autoComplete="description"
@@ -174,9 +173,9 @@ export default function Home() {
             />
           </div>
 
-          <div className=" h-[100px] w-[200px]">
+          <div className=" ">
             <input
-              className="relative z-10 cursor-pointer "
+              className="relative cursor-pointer"
               type="file"
               name="file"
               onChange={handleOnChange}
@@ -184,31 +183,33 @@ export default function Home() {
               accept="image/*"
             />
           </div>
-          <div className="relative h-40 w-30 flex">
-            <div className="p-2">
+          <div className="relative w-30 flex">
+            <div className="">
               {imageSrc?.map((my_image) => (
                 <Image
                   key={my_image}
                   src={my_image}
                   alt="someimage"
-                  width={130}
-                  height={100}
+                  width={230}
+                  height={200}
                   className="pl-5 ml-2 rounded-lg"
                 />
               ))}
             </div>
           </div>
+          <div className="h-80 w-96 bg-gray-500 p-3 rounded-3xl">
+            <MapWithSearch parentCallback={handleCallback} />
+          </div>
           <button
-            className="btn btn-success cursor-pointer bg-gray-400 rounded-md p-1 hover:bg-gray-600 hover:shadow-xl"
+            className="cursor-pointer bg-gray-400 rounded-md p-1 hover:bg-gray-600 hover:shadow-xl"
             type="submit"
           >
             Add Property
           </button>
         </form>
+        </div>
       </main>
-      <MapWithSearch parentCallback = {handleCallback}/>
       <Footer />
     </div>
   );
 }
-// className="relative z-10 cursor-pointer bg-gray-400 hover:bg-gray-500 p-2 hover:shadow-lg"

@@ -4,8 +4,8 @@ import Geocoder from "react-map-gl-geocoder";
 
 function MapWithSearch(props) {
   const [viewport, setViewport] = useState({
-    width: "50vw",
-    height: "50vh",
+    width: "100vw",
+    height: "100vh",
     latitude: 37.7577,
     longitude: -122.4376,
     zoom: 8,
@@ -36,11 +36,12 @@ function MapWithSearch(props) {
         ref={mapRef}
         {...viewport}
         width="100%"
-        height="100%"
+        height="33.33%"
         mapStyle={"mapbox://styles/timaboon/ckxlj75b63bcq15rj973a4ac3"}
         mapboxApiAccessToken={process.env.mapbox_key}
         onViewportChange={handleViewportChange}
         mapboxApiAccessToken={process.env.mapbox_key}
+        className="rounded-3xl relative"
       >
         <Geocoder
           mapRef={mapRef}
@@ -48,6 +49,7 @@ function MapWithSearch(props) {
           onResult={handleResult}
           mapboxApiAccessToken={process.env.mapbox_key}
           position="top-left"
+          placeholder="Enter Property Address"
         />
       </MapGL>
       {/* <MapGL

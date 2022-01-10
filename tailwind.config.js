@@ -5,8 +5,13 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    // colors: {
+    //   'purple-': {
+
+    // }
   },
   plugins: [
     require('tailwind-scrollbar-hide'),
+    require('daisyui'),
   ],
 }
