@@ -10,8 +10,6 @@ import AddressHandler from "../helper/AddressHandler";
 export default function Home() {
   const [imageSrc, setImageSrc] = useState([]);
   const router = useRouter();
-  // const myimgs = [];
-
   const [title, setTitle] = useState([""]);
   const [guestLimit, setGuestLimit] = useState([""]);
   const [description, setDescription] = useState([""]);

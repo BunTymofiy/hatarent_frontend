@@ -24,5 +24,11 @@ class AddressHandler
                 return null;
             }
     }
+    getAddressString(addressObject)
+    {
+        let addressString = "";
+        addressString += addressObject.street + ", " + addressObject.city + ", " + addressObject.province + ", " + addressObject.zip + ", " + addressObject.country
+        return addressString;
+    }
 }
 export default new AddressHandler()
