@@ -66,19 +66,19 @@ export default function Home() {
     const formData = new FormData();
     formData.append("upload_preset", "hatarent_images");
 
-    for (let i = 0; i < fileInput.files.length; i++) {
-      // console.log(i);
-      await formData.delete("file");
-      await formData.append("file", fileInput.files[i]);
-      const data = await fetch(
-        "https://api.cloudinary.com/v1_1/hatarent/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      ).then((res) => res.json());
-      imgs.push(data.secure_url);
-    }
+    // for (let i = 0; i < fileInput.files.length; i++) {
+    //   // console.log(i);
+    //   await formData.delete("file");
+    //   await formData.append("file", fileInput.files[i]);
+    //   const data = await fetch(
+    //     "https://api.cloudinary.com/v1_1/hatarent/image/upload",
+    //     {
+    //       method: "POST",
+    //       body: formData,
+    //     }
+    //   ).then((res) => res.json());
+    //   imgs.push(data.secure_url);
+    // }
     let property = {
       hostUserUuid: "acc647e9-b9f4-4014-8b6c-f2ef8fcd257c",
       title: title,
@@ -86,7 +86,7 @@ export default function Home() {
       description: description,
       contact_person: contact_person,
       email: email,
-      images: imgs,
+      images: imageSrc,
       address: AddressHandler.getAddress(addressRow),
     };
 
