@@ -42,7 +42,7 @@ function PropertyForm(props) {
   }
   async function setData() {
     try {
-      console.log(data);
+      // console.log(data);
       setUuid(data.uuid);
       setTitle(data.title);
       setGuestLimit(data.guestLimit);
@@ -56,11 +56,14 @@ function PropertyForm(props) {
       console.log(e);
     }
   }
- 
-  useEffect( () => {
+
+  useEffect(() => {
     setIsMounted(true);
   }, []);
-  useEffect(async () => {await setData()}, [isMounted]);
+  useEffect(async () => {
+    if(data === null || data === undefined) return;
+    await setData();
+  }, [isMounted]);
 
   function readFiles(file) {
     return new Promise(function (resolve, reject) {
@@ -111,8 +114,8 @@ function PropertyForm(props) {
       address: AddressHandler.getAddress(addressRow),
     };
 
-    console.log("property => " + JSON.stringify(property));
-    await PropertyService.updateProperty(property);
+    // console.log("property => " + JSON.stringify(property));
+    await PropertyService.updateProperty(uuid, property);
     router.push("/search");
   };
   const handleCallback = async (data) => {
@@ -221,7 +224,10 @@ function PropertyForm(props) {
               </div>
             </div>
             <div className="h-80 w-96 bg-gray-500 p-3 rounded-3xl">
-              <MapWithSearch parentCallback={handleCallback} />
+              <MapWithSearch
+                mapValue={address}
+                parentCallback={handleCallback}
+              />
             </div>
             <button
               className="cursor-pointer bg-gray-400 rounded-md p-1 hover:bg-gray-600 hover:shadow-xl"
