@@ -15,6 +15,7 @@ function Header() {
         <p className="text-4xl font-bold select-none">Hatarent</p>
       </div>
       <div></div>
+      
       <div></div>
     </header>
   );

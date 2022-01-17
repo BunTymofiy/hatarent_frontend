@@ -1,10 +1,12 @@
 import MapWithSearch from "../components/MapWithSearch";
 import Image from "next/image";
-// import myText from "../constants/imgtext.json";
 import { useEffect, useState } from "react";
 import PropertyService from "../services/PropertyService";
 import AddressHandler from "../helper/AddressHandler";
 import { useRouter } from "next/router";
+import { TrashIcon } from "@heroicons/react/outline";
+
+
 function PropertyForm(props) {
   const data = props.data;
   const [imageSrc, setImageSrc] = useState([]);
@@ -35,9 +37,6 @@ function PropertyForm(props) {
     }
     Promise.all(readers).then((values) => {
       setImageSrc(values);
-      // for (let i = 0; i < values.length; i++) {
-      //   myimgs.push(values[i]);
-      // }
     });
   }
   async function setData() {
@@ -51,6 +50,7 @@ function PropertyForm(props) {
       setEmail(data.email);
       setHostUserUuid(data.hostUserUuid);
       setImages(data.images);
+      setImageSrc(data.images);
       setAddress(data.address);
     } catch (e) {
       console.log(e);
@@ -127,7 +127,7 @@ function PropertyForm(props) {
     <div>
       <main>
         <div className="p-6 rounded-lg shadow-lg bg-white max-w-4xl mx-auto">
-          <form method="POST" className="relative" onSubmit={handleOnSubmit}>
+          <form method="PUT" className="relative" onSubmit={handleOnSubmit}>
             <div className="form-group">
               <label
                 htmlFor="title"
@@ -210,16 +210,19 @@ function PropertyForm(props) {
               />
             </div>
             <div className="relative w-30 flex">
-              <div className="">
+              <div className="grid grid-flow-col">
                 {imageSrc?.map((my_image) => (
+                  <div className="m-2 overflow-x-auto"> 
+                  <TrashIcon className="h-7 text-red-600 z-50 "/>
                   <Image
                     key={my_image}
                     src={my_image}
-                    alt="someimage"
+                    alt="someImage"
                     width={230}
                     height={200}
-                    className="pl-5 ml-2 rounded-lg"
+                    className="pl-5 ml-2 rounded-xl z-40"
                   />
+                  </div>
                 ))}
               </div>
             </div>
