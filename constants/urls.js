@@ -2,3 +2,4 @@
 export const url = "http://localhost:5000/" // For developpement 
 // export const feUrl = "https://hatarent-frontend.vercel.app"
 export const feUrl = "http://localhost:3000"
+
