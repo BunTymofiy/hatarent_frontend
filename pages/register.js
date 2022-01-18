@@ -1,5 +1,7 @@
 import axios from "axios";
-import { useState,SyntheticEvent } from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
+
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import InputWarningHelper from "../services/InputWarningHelper";
@@ -16,6 +18,7 @@ function Register() {
   const [username, setUserName] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(false);
 
+  const router = useRouter();
   const onChangeEmail = (e) => {
     InputWarningHelper.onChange(e);
     setEmail(e.target.value);
@@ -73,17 +76,26 @@ function Register() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    axios.post(postGuestUrl)
-    if (
-      email !== "" &&
-      password !== "" &&
-      confirmPassword !== "" &&
-      passwordMatch
-    ) {
-      console.log("Form submitted");
-    } else {
-      console.log("Form not submitted");
-    }
+    let resp = await fetch(postGuestUrl, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        username: username
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      // if(resp.)
+    router.push("/login");
   };
   return (
     <div>

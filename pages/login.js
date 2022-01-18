@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import axios from "axios";
 import InputWarningHelper from "../services/InputWarningHelper";
+import { url } from "../constants/urls";
 
 function login() {
+  const loginUrl = url + "login";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const onChangeEmail = (e) => {
@@ -15,13 +16,30 @@ function login() {
     InputWarningHelper.onChange(e);
     setPassword(e.target.value);
   };
-  
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const user = new URLSearchParams();
+    user.append("email", email);
+    user.append("password", password);
+    try {
+      let res = await fetch(loginUrl, {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded" },
+        credentials: "include",
+        body: user.toString()
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div>
       <Header />
       <main className="h-screen">
         <div className="p-6 rounded-xl shadow-xl bg-white max-w-sm mx-auto ">
-          <form>
+          <form onSubmit={onSubmit}>
             <div className="form-group mb-6">
               <label
                 htmlFor="InputEmail"
