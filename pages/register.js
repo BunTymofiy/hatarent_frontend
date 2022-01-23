@@ -97,12 +97,14 @@ function Register() {
       // if(resp.)
     router.push("/login");
   };
+  const formOnChange = (e) => {
+    
   return (
     <div>
       <Header />
       <main className="h-screen">
         <div className="block p-6 rounded-lg shadow-lg bg-white max-w-md mx-auto">
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} onChange={}>
             <div className="grid grid-cols-2 gap-4">
               <div className="form-group mb-6">
                 <input

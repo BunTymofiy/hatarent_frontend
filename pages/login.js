@@ -29,7 +29,6 @@ function login() {
         credentials: "include",
         body: user.toString()
       });
-      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
