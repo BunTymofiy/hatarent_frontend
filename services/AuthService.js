@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { url } from '../constants/urls'
 
-const UrlLogin = url + "property"
+const UrlUser = url + "user"
 const UrlRegister = url + "property"
 const UrlLogin = url + "property"
-
+const UrlLogout = url + "logout"
 
 class AuthService
 {
@@ -16,6 +16,18 @@ class AuthService
     {
         console.log(UrlProperty + "/" + uuid)
         return axios.get(UrlProperty + "/" + uuid)
+    }
+    getUser()
+    { 
+        try {
+        return axios.get(UrlUser, {withCredentials:true})
+        } catch (e) {
+            return null
+        }
+    }
+    logout()
+    {
+        return axios.head('http://localhost:3000/api/logout')
     }
 }
 export default new AuthService()
