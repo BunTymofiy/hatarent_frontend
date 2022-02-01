@@ -21,7 +21,7 @@ function Property(props) {
         <div className="flex justify-between">
           <p>{property.address.city}</p>
         </div>
-        <h4 className="text-xl">{property.title}</h4>
+        <h4 className="text-xl" id="title">{property.title}</h4>
         <div className="border-b w-10 pt-2" />
 
         <p className="pt-2 text-sm text-gray-500 flex-grow">
