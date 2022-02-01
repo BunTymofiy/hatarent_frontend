@@ -2,6 +2,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import ProgressBar from "@badrap/bar-of-progress";
 import Router from "next/router";
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css';
 
 import "../styles/globals.css";
 const progress = new ProgressBar({

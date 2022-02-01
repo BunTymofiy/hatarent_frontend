@@ -1,210 +1,196 @@
+import { SearchIcon, UsersIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { DateRangePicker } from "react-date-range";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import MapWithSearch from "../components/MapWithSearch";
-import Image from "next/image";
-// import myText from "../constants/imgtext.json";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import PropertyService from "../services/PropertyService";
+import AuthService from "../services/AuthService";
+import MapGL, { Marker, Popup } from "react-map-gl";
+import Geocoder from "react-map-gl-geocoder";
 import AddressHandler from "../helper/AddressHandler";
-export default function Home() {
-  const [imageSrc, setImageSrc] = useState([]);
+
+export default function Home({ placeholder }) {
+  const [searchInput, setSearchInput] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [numberOfGuests, setNumberOfGuests] = useState(1);
+  const [isMounted, setIsMounted] = useState(false);
+  const [user, setUser] = useState(null);
   const router = useRouter();
-  const [title, setTitle] = useState([""]);
-  const [guestLimit, setGuestLimit] = useState([""]);
-  const [description, setDescription] = useState([""]);
-  const [contact_person, setContact_person] = useState([""]);
-  const [email, setEmail] = useState([""]);
 
-  const [hostUserUuid, setHostUserUuid] = useState([
-    "acc647e9-b9f4-4014-8b6c-f2ef8fcd257c",
-  ]);
-  const [addressRow, setAddressRow] = useState(null);
-  function handleOnChange(changeEvent) {
-    let files = changeEvent.target.files;
-    let readers = [];
-    if (!files.length) {
-      return;
+  const [address, setAddress] = useState(null);
+  const [addressRaw, setAddressRaw] = useState(null);
+  const [viewport, setViewport] = useState({
+    width: "100vw",
+    height: "100vh",
+    latitude: 37.7577,
+    longitude: -122.4376,
+    zoom: 8,
+  });
+  const geocoderContainerRef = useRef();
+  const mapRef = useRef();
+  const handleViewportChange = useCallback(
+    (newViewport) => setViewport(newViewport),
+    []
+  );
+  const handleGeocoderViewportChange = useCallback(
+    (newViewport) => {
+      const geocoderDefaultOverrides = { transitionDuration: 1000 };
+
+      return handleViewportChange({
+        ...newViewport,
+        ...geocoderDefaultOverrides,
+      });
+    },
+    [handleViewportChange]
+  );
+
+  const getSelectedResult = useCallback(
+    (event) =>
+      setSearchInput(
+        AddressHandler.getSearchAddressString(
+          AddressHandler.getSearchAddress(event.result)
+        )
+      ),
+    []
+  );
+  const getSearchInp = useCallback((event) => setSearchInput(event.query), []);
+
+ 
+  useEffect(async () => {
+    setIsMounted(true);
+  }, []);
+  useEffect(async () => {
+    if (isMounted == true) {
+      try{
+      let userFound = await AuthService.getUser();
+      setUser(userFound.data);
+
+      } catch (e) {
+      }
     }
-    for (let i = 0; i < files.length; i++) {
-      readers.push(readFiles(files[i]));
-    }
-    Promise.all(readers).then((values) => {
-      setImageSrc(values);
-      // for (let i = 0; i < values.length; i++) {
-      //   myimgs.push(values[i]);
-      // }
-    });
+  }, [isMounted]);
 
-    imageSrc.map((img) => {
-      console.log(img);
-      // setImageSrc(img);
-    });
-  }
-  function readFiles(file) {
-    return new Promise(function (resolve, reject) {
-      let fr = new FileReader();
-
-      fr.onload = function () {
-        resolve(fr.result);
-      };
-
-      fr.onerror = function () {
-        reject(fr);
-      };
-
-      fr.readAsDataURL(file);
-    });
-  }
-
-  const handleOnSubmit = async (event) => {
-    event.preventDefault();
-    const imgs = [];
-    const form = event.currentTarget;
-    const fileInput = Array.from(form.elements).find((e) => e.name === "file");
-    // console.log(fileInput.files);
-    const formData = new FormData();
-    formData.append("upload_preset", "hatarent_images");
-
-    // for (let i = 0; i < fileInput.files.length; i++) {
-    //   // console.log(i);
-    //   await formData.delete("file");
-    //   await formData.append("file", fileInput.files[i]);
-    //   const data = await fetch(
-    //     "https://api.cloudinary.com/v1_1/hatarent/image/upload",
-    //     {
-    //       method: "POST",
-    //       body: formData,
-    //     }
-    //   ).then((res) => res.json());
-    //   imgs.push(data.secure_url);
-    // }
-    let property = {
-      hostUserUuid: "acc647e9-b9f4-4014-8b6c-f2ef8fcd257c",
-      title: title,
-      guestLimit: guestLimit,
-      description: description,
-      contact_person: contact_person,
-      email: email,
-      images: imageSrc,
-      address: AddressHandler.getAddress(addressRow),
-    };
-
-    console.log("property => " + JSON.stringify(property));
-    await PropertyService.createProperty(property);
-    router.push("/search");
+  const handleSelect = (ranges) => {
+    setStartDate(ranges.selection.startDate);
+    setEndDate(ranges.selection.endDate);
   };
-  const handleCallback = async (data) => {
-    // console.log(data);
-    setAddressRow(data);
-    // console.log(AddressHandler.getAddress(addressRow));
+  const resetInput = () => {
+    setSearchInput("");
+  };
+  const selectionRange = {
+    startDate: startDate,
+    endDate: endDate,
+    key: "selection",
+  };
+  const search = () => {
+    router.push({
+      pathname: "/search",
+      query: {
+        location: searchInput,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        numberOfGuests: numberOfGuests,
+      },
+    });
   };
   return (
     <div>
-      <Header />
-      <main>
-        <div className="p-6 rounded-lg shadow-lg bg-white max-w-4xl mx-auto">
-        <form method="POST" className="relative" onSubmit={handleOnSubmit}>
-          <div className="form-group">
-            <label htmlFor="title" className="form-label inline-block mb-2 text-gray-700">Title</label>
-            <input
-              placeholder="Enter Title"
-              className="form-control inputs"
-              name="title"
-              type="text"
-              autoComplete="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="guestLimit">Max Guest</label>
-            <input
-              placeholder="Enter Guest Number"
-              className="form-control inputs"
-              name="guestLimit"
-              type="number"
-              autoComplete="guestLimit"
-              value={guestLimit}
-              onChange={(e) => setGuestLimit(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="contact_person">Contact Person</label>
-            <input
-              placeholder="Enter Contact Person"
-              className="form-control inputs"
-              name="contact_person"
-              type="text"
-              autoComplete="contact_person"
-              value={contact_person}
-              onChange={(e) => setContact_person(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              placeholder="Enter Email"
-              className="form-control inputs"
-              name="email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <textarea
-              placeholder="Enter Description"
-              className="form-control inputs mb-1"
-              name="description"
-              type="text"
-              autoComplete="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className=" ">
-            <input
-              className="relative cursor-pointer"
-              type="file"
-              name="file"
-              onChange={handleOnChange}
-              multiple
-              accept="image/*"
-            />
-          </div>
-          <div className="relative w-30 flex">
+      <Header user={user} />
+      <main className="h-screen card">
+        <div className="flex flex-col items-center  ">
+          <div>
             <div className="">
-              {imageSrc?.map((my_image) => (
-                <Image
-                  key={my_image}
-                  src={my_image}
-                  alt="someimage"
-                  width={230}
-                  height={200}
-                  className="pl-5 ml-2 rounded-lg"
-                />
-              ))}
+              <h1 className="text-6xl text-gray-300 font-serif">
+                Welcome to{" "}
+                <span className="font-sans font-semibold">HATARENT</span>
+              </h1>
             </div>
+            <div className="flex items-center md:border-2 rounded-full py-2 md:shadow-sm ">
+              <input
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="pl-5 bg-transparent outline-none flex-grow text-sm text-white"
+                type="text"
+                placeholder={placeholder || "Start your search"}
+              />
+              <SearchIcon className="h-8 hidden md:inline-flex bg-gray-400 text-white rounded-full p-2 cursor-pointer md:mx-2" />
+            </div>
+            {searchInput && (
+              <div>
+                <div className=" col-span-4 mx-auto rounded-t-md bg-white p-5 ">
+                  <section>
+                    <div className="relative border-gray-300 border-2 shadow-sm">
+                      <DateRangePicker
+                        ranges={[selectionRange]}
+                        minDate={new Date()}
+                        rangeColors={["#686FB7"]}
+                        onChange={handleSelect}
+                        className=""
+                      />
+                    </div>
+
+                    <div className="flex items-center border-b mb-4">
+                      <h2 className="text-2xl flex-grow font-semibold">
+                        Number of Guests
+                      </h2>
+                      <UsersIcon className="h-5" />
+                      <input
+                        min={1}
+                        value={numberOfGuests}
+                        onChange={(e) => setNumberOfGuests(e.target.value)}
+                        type="number"
+                        className="w-12 pl-2 text-lg outline-none text-blue-600"
+                      />
+                    </div>
+
+                    <div className="flex m-2">
+                      <button
+                        onClick={resetInput}
+                        className="flex-grow p-2 btn mr-1 bg-sky-600 text-gray-500"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={search}
+                        className="flex-grow p-2 btn text-blue-600"
+                      >
+                        Search
+                      </button>
+                    </div>
+                  </section>
+                  <section className="mb-3"> 
+                    <div style={{ height: "100vh" }} className="rounded-t-xl ">
+                      <MapGL
+                        ref={mapRef}
+                        {...viewport}
+                        width="100%"
+                        height="33.33%"
+                        mapStyle={
+                          "mapbox://styles/timaboon/ckxlj75b63bcq15rj973a4ac3"
+                        }
+                        mapboxApiAccessToken={process.env.mapbox_key}
+                        onViewportChange={handleViewportChange}
+                        className="rounded-b-3xl"
+                      >
+                        <Geocoder
+                          mapRef={mapRef}
+                          containerRef={geocoderContainerRef}
+                          onViewportChange={handleGeocoderViewportChange}
+                          onResult={getSelectedResult}
+                          mapboxApiAccessToken={process.env.mapbox_key}
+                          position="top-left"
+                          inputValue={searchInput}
+                          onLoading={getSearchInp}
+                          className="input"
+                        />
+                      </MapGL>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            )}
           </div>
-          <div className="h-80 w-96 bg-gray-500 p-3 rounded-3xl">
-            <MapWithSearch parentCallback={handleCallback} />
-          </div>
-          <button
-            className="cursor-pointer bg-gray-400 rounded-md p-1 hover:bg-gray-600 hover:shadow-xl"
-            type="submit"
-          >
-            Add Property
-          </button>
-        </form>
         </div>
       </main>
       <Footer />
