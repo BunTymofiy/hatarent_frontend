@@ -3,8 +3,10 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import InputWarningHelper from "../services/InputWarningHelper";
 import { url } from "../constants/urls";
+import { useRouter } from "next/router";
 
 function login() {
+  const router = new useRouter();
   const loginUrl = url + "login";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,10 +27,11 @@ function login() {
     try {
       let res = await fetch(loginUrl, {
         method: "POST",
-        headers: {"Content-Type": "application/x-www-form-urlencoded" },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         credentials: "include",
-        body: user.toString()
+        body: user.toString(),
       });
+      router.push("/");
     } catch (err) {
       console.log(err);
     }
@@ -92,10 +95,27 @@ function login() {
               </small>
             </div>
 
-            <button type="submit" className=" btn btn-primary w-full">
+            <button
+              id="Login"
+              type="submit"
+              className=" btn btn-primary w-full"
+            >
               Login
             </button>
           </form>
+          <div className="text-center">
+            <a
+              className="link link-hover btn-link btn-md"
+              onClick={() => {
+                router.push({
+                  pathname: "/register",
+                  query: { role: "guest" },
+                });
+              }}
+            >
+              Create new account
+            </a>
+          </div>
         </div>
       </main>
       <Footer />
