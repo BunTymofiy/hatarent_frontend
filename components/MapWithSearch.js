@@ -60,6 +60,7 @@ function MapWithSearch(props) {
           mapboxApiAccessToken={process.env.mapbox_key}
           position="top-left"
           inputValue={addressRaw}
+          className="input"
         />
       </MapGL>
     </div>
