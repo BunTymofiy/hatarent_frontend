@@ -25,6 +25,7 @@ class PropertyService
     deleteProperty(uuid)
     {
         return axios.delete(UrlProperty + "/" + uuid)
+        // return axios.delete("http://localhost:3000/api/property/" + uuid)
     }
 }
 export default new PropertyService()
