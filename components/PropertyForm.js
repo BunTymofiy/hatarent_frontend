@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import PropertyService from "../services/PropertyService";
 import AddressHandler from "../helper/AddressHandler";
 import { useRouter } from "next/router";
-import { TrashIcon } from "@heroicons/react/outline";
 
 function PropertyForm(props) {
   const data = props.data;
+  const user = props.user;
   const [images, setImages] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -19,8 +19,7 @@ function PropertyForm(props) {
   const [contact_person, setContact_person] = useState([""]);
   const [email, setEmail] = useState([""]);
   const [address, setAddress] = useState(null);
-
-  const [hostUserUuid, setHostUserUuid] = useState("acc647e9-b9f4-4014-8b6c-f2ef8fcd257c");
+  const [hostUserUuid, setHostUserUuid] = useState(null);
   function readFiles(file) {
     return new Promise(function (resolve, reject) {
       let fr = new FileReader();
@@ -80,7 +79,7 @@ function PropertyForm(props) {
   const handleOnSubmit = async (event) => {
     event.preventDefault();
     let property = {
-      hostUserUuid: "acc647e9-b9f4-4014-8b6c-f2ef8fcd257c",
+      hostUserUuid: user.uuid,
       title: title,
       guestLimit: guestLimit,
       description: description,
@@ -95,7 +94,7 @@ function PropertyForm(props) {
     if (props.pathname === "/add-property") {
       await PropertyService.createProperty(property);
     }
-    router.push("/search");
+    router.push("/host-properties");
   };
   const handleCallback = async (data) => {
     setAddressRow(data);
@@ -196,7 +195,6 @@ function PropertyForm(props) {
               <div className="grid grid-flow-col">
                 {images?.map((my_image) => (
                   <div key={my_image} className="m-2 overflow-x-auto">
-                    <TrashIcon className="h-7 text-red-600 z-50 " />
                     <Image
                       key={my_image}
                       src={my_image}

@@ -20,15 +20,15 @@ function Header(props) {
   const userImage = () => {
     if (user?.image === null) {
       return (
-      <div className="dropdown relative h-12 w-12 mr-5 rounded-2xl dropdown-end">
+        <div className="dropdown relative h-12 w-12 mr-5 rounded-2xl dropdown-end">
           <UserCircleIcon
             className="h-12 btn-ghost text-gray-300 cursor-pointer hover:scale-105"
-            tabindex="0"
+            tabIndex="0"
           />
-          
+
           <ul
-            tabindex="0"
-            class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+            tabIndex="0"
+            className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
           >
             <li>
               <a>Account Information</a>
@@ -38,7 +38,8 @@ function Header(props) {
               <a onClick={logoutHandler}>Sign Out</a>
             </li>
           </ul>
-        </div>)
+        </div>
+      );
     } else {
       return (
         <div className="dropdown relative h-12 w-12 mr-5 rounded-2xl dropdown-end">
@@ -47,11 +48,11 @@ function Header(props) {
             layout="fill"
             alt="user"
             className="rounded-full btn mb-1 hover:scale-105"
-            tabindex="0"
+            tabIndex="0"
           />
           ;
           <ul
-            tabindex="0"
+            tabIndex="0"
             class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
           >
             <li>
@@ -66,33 +67,37 @@ function Header(props) {
       );
     }
   };
-  if (user !== undefined && user !== null) {
-    let roles = [];
-    document.getElementById("hd").classList.remove("grid-cols-3");
-    document.getElementById("hd").classList.add("grid-cols-2");
-    for (let i = 0; i < user.roles.length; i++) {
-      roles.push(user.roles[i].name);
+  const ownerButtons = () => {
+    if (user != null) {
+      let roles = [];
+      for (let i = 0; i < user.roles.length; i++) {
+        roles.push(user.roles[i].name);
+      }
+      if (roles.indexOf("ROLE_HOST") > -1) {
+          let roles = [];
+          document.getElementById("hd").classList.remove("grid-cols-2");
+          document.getElementById("hd").classList.add("grid-cols-3");
+          for (let i = 0; i < user.roles.length; i++) {
+            roles.push(user.roles[i].name);
+          }
+          if (roles.indexOf("ROLE_HOST") > -1) {
+            return (
+              <div id="" className="items-stretch lg:flex justify-between hidden">
+                <a className="btn btn-ghost rounded-btn hover:bg-blue-800 w-1/3">
+                  Calendar
+                </a>
+                <a onClick={() => router.push("/host-properties")} className="btn btn-ghost rounded-btn hover:bg-blue-900 w-1/3">
+                  Properties
+                </a>
+                <a className="btn btn-ghost rounded-btn hover:bg-blue-900 w-1/3">
+                  Notifications
+                </a>
+              </div>
+            );
+          }
+      }
     }
-    if (roles.indexOf("ROLE_HOST") > -1) {
-      console.log("woohoo you are a host");
-      // return (
-      //   <div id="" className="items-stretch lg:flex justify-between hidden">
-      //     <a className="btn btn-ghost rounded-btn hover:bg-blue-800 w-1/3">
-      //       Calendar
-      //     </a>
-      //     <a className="btn btn-ghost rounded-btn hover:bg-blue-900 w-1/3">
-      //       Properties
-      //     </a>
-      //     <a className="btn btn-ghost rounded-btn hover:bg-blue-900 w-1/3">
-      //       Notifications
-      //     </a>
-      //   </div>
-      // );
-    }
-    if (roles.indexOf("ROLE_GUEST") > -1) {
-      console.log("woohoo you are a guest");
-    }
-  }
+  };
   return (
     <header
       id="hd"
@@ -114,7 +119,7 @@ function Header(props) {
         </div>
       </div>
       {/* Middle */}
-
+        {ownerButtons()}
       {/* Right */}
       <div className="flex items-center space-x-4 justify-end text-gray-800">
         {!user && (

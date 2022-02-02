@@ -15,7 +15,7 @@ test("Create a new property", async ({ page }) => {
   await page.click(".mapboxgl-ctrl-geocoder--input", { clickCount: 0 });
   await page.type(".mapboxgl-ctrl-geocoder--input", "751 Rue Le Caron");
   await page.click(".mapboxgl-ctrl-geocoder--suggestion", { clickCount: 0 });
-//   await page.click("#submit");
+  // await page.click("#submit");
 
 //   // const url = await page.url();
 //   // expect(url).toContain("/search");

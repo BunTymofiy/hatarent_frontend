@@ -1,32 +1,30 @@
 import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Property from "../components/Property";
-import PropertyService from "../services/PropertyService";
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
-import AddressHandler from "../helper/AddressHandler";
 import MapMultipleMarkers from "../components/MapMultipleMarkers";
+import Property from "../components/Property";
 import AuthService from "../services/AuthService";
+import PropertyService from "../services/PropertyService";
 
-function Search() {
-  const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
+function HostProperties() {
+  const router = new useRouter();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [user, setUser] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
 
-  async function getData(location, numberOfGuests) {
+  async function getData(userFound) {
     try {
-      const searchAddress = AddressHandler.getSearchAddressQuery(location);
       setLoading(true);
       setData(null);
       let res = await PropertyService.getProperties();
       let dataResponse = res.data;
       const filteredProperties = dataResponse.filter((property) =>
-        checkIfLocationMach(property, searchAddress, numberOfGuests)
+        checkIfPropertyIsOwners(property,userFound)
       );
       setData(filteredProperties);
+      console.log(filteredProperties);
       return;
     } catch (err) {
       console.log(err);
@@ -35,25 +33,12 @@ function Search() {
       setIsMounted(true);
     }
   }
-
-  function checkIfLocationMach(property, location, numberOfGuests) {
-    if (property.address.city == location.city) {
-      if (property.guestLimit >= numberOfGuests) {
-        return property;
-      }
+  function checkIfPropertyIsOwners(property,userFound) {
+    if (property.hostUserUuid === userFound.uuid) {
+      return property;
     }
     return null;
   }
-  useEffect(() => {
-    if (!router?.isReady) return;
-    const { location, startDate, endDate, numberOfGuests } = router.query;
-    const formattedStartDate = format(new Date(startDate), "dd MMMM yyyy");
-    const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
-    const range = `${formattedStartDate} - ${formattedEndDate}`;
-    router.query;
-    getData(location, numberOfGuests);
-  }, [router.isReady]);
-
   useEffect(async () => {
     setIsMounted(true);
   }, []);
@@ -62,7 +47,10 @@ function Search() {
       try {
         let userFound = await AuthService.getUser();
         setUser(userFound.data);
-      } catch (e) {}
+        getData(userFound.data);
+      } catch (e) {
+        router.push("/login");
+      }
     }
   }, [isMounted]);
 
@@ -80,6 +68,11 @@ function Search() {
       </div>
     );
   }
+  let mapComponent = null;
+    if (data != null && data.length > 0) {
+        mapComponent =  <MapMultipleMarkers searchResults={data} />
+    }
+
 
   return (
     <div className="h-screen">
@@ -87,7 +80,7 @@ function Search() {
       {loader}
       <main className="flex">
         <section className="flex-grow pt-14 pl-6">
-        <button onClick={() => router.push("/")} className="text-gray-200 mb-4 btn btn-outline btn-sm">Back to homepage</button>
+          <button onClick={() => router.push("/")} className="text-gray-200 mb-4 btn btn-outline btn-sm">Back to homepage</button>
           <div className="flex flex-col">
             {data?.map((propertyFound) => (
               <div
@@ -105,13 +98,13 @@ function Search() {
           </div>
         </section>
         <section className="hidden pt-14 flex-col  pr-6 lg:inline-flex lg:min-w-[600px]">
-          <div className="text-transparent text-lg mb-5">lol</div>
-          {data && <MapMultipleMarkers searchResults={data} />}
+        <button onClick={() => router.push("/add-property")} className="text-gray-200 mb-4 mx-auto btn btn-outline btn-sm">Add a property</button>
+          {mapComponent}
         </section>
       </main>
-      <Footer className="" />
+      <Footer />
     </div>
   );
 }
 
-export default Search;
+export default HostProperties;

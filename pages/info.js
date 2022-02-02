@@ -77,6 +77,7 @@ export default function info(props) {
         roles.push(user.roles[i].name);
       }
       if (roles.indexOf("ROLE_HOST") > -1) {
+        if(hostUserUuid === user.uuid)
         return (
           <div>
             <button
@@ -170,17 +171,6 @@ export default function info(props) {
             </h2>
             <div className="flex flex-col items-center mt-10">
               <div className="bg-gray-200 rounded-3xl  p-4 bg-opacity-80 mb-5">
-                {/* <div className="max-w-lg p-2 h-32 md:h-44 mx-auto  space-x-4 carousel carousel-center bg-neutral rounded-box ">
-                  {images?.map((image) => (
-                    <div key={image} className="carousel-item">
-                      <img
-                        src={image}
-                        key={image}
-                        className="rounded-2xl w-full h-full "
-                      />
-                    </div>
-                  ))}
-                </div> */}
                 <div className="relative w-min mx-auto">
                   <div className="w-full max-w mx-auto">
                     <div className=" h-96 min-w-[500px] carousel">

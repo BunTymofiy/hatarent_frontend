@@ -38,7 +38,9 @@ function UpdateProperty() {
       try {
         let userFound = await AuthService.getUser();
         setUser(userFound.data);
-      } catch (e) {}
+      } catch (e) {
+        router.push("/login");
+      }
     }
   }, [isMounted]);
 
@@ -67,7 +69,7 @@ function UpdateProperty() {
   let content = null;
 
   if (data != null) {
-    content = <PropertyForm data={data} pathname={pathname} />;
+    content = <PropertyForm data={data} pathname={pathname}  user={user}/>;
   }
   return (
     <>
