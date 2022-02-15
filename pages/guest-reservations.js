@@ -1,34 +1,32 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import PropertyForm from "../components/PropertyForm";
+import Reservation from "../components/Reservation";
 import AuthService from "../services/AuthService";
-import PropertyService from "../services/PropertyService";
+import ReservationService from "../services/ReservationService";
 
-function UpdateProperty() {
+function GuestReservations() {
   const router = new useRouter();
-  const [data, setData] = useState(null);
-  const [pathname, setPathname] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [reservations, setReservations] = useState([]);
 
-  async function getData() {
+  async function getData(userFound) {
     try {
       setLoading(true);
-      setData(null);
-
-      let res = await PropertyService.getByUuidProperty(router.query.uuid);
+      let res = await ReservationService.getReservationsByUser(userFound.uuid);
       let dataResponse = await res.data;
-      setData(dataResponse);
+   
+      setReservations(dataResponse);
     } catch (e) {
       console.log(e);
     } finally {
       setLoading(false);
+      setIsMounted(true);
     }
   }
-
   useEffect(async () => {
     setIsMounted(true);
   }, []);
@@ -37,19 +35,14 @@ function UpdateProperty() {
       try {
         let userFound = await AuthService.getUser();
         setUser(userFound.data);
+        getData(userFound.data);
       } catch (e) {
         router.push("/login");
       }
     }
   }, [isMounted]);
 
-  useEffect(() => {
-    if (!router?.isReady) return;
-    getData();
-    setPathname(router.pathname);
-  }, [router.isReady]);
   let loader = null;
-
   if (loading) {
     loader = (
       <div className="h-screen ">
@@ -64,19 +57,28 @@ function UpdateProperty() {
     );
   }
 
-  let content = null;
-
-  if (data != null) {
-    content = <PropertyForm data={data} pathname={pathname} user={user} />;
-  }
   return (
     <div className="h-screen">
       <Header user={user} />
       {loader}
-      {content}
+      <main>
+        <div className="flex justify-center align-middle">
+          <h1 className="text-3xl text-gray-300">Your Reservations</h1>
+        </div>
+        <div className=" flex">
+          <section className="flex-grow pt-14 pl-6 pr-6">
+          <button onClick={() => router.push("/")} className="text-gray-200 mb-4 btn btn-outline btn-sm">Back to homepage</button>
+            {reservations?.map((reservation) => (
+              <div key={reservation.reservationId} className="flex flex-col space-y-2">
+                <Reservation reservation={reservation} />
+              </div>
+            ))}
+          </section>
+        </div>
+      </main>
       <Footer />
     </div>
   );
 }
 
-export default UpdateProperty;
+export default GuestReservations;

@@ -11,7 +11,6 @@ class PropertyService
     }
     getByUuidProperty(uuid)
     {
-        console.log(UrlProperty + "/" + uuid)
         return axios.get(UrlProperty + "/" + uuid)
     }
     createProperty(property)

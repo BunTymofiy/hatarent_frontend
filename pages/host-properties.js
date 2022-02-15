@@ -24,7 +24,6 @@ function HostProperties() {
         checkIfPropertyIsOwners(property,userFound)
       );
       setData(filteredProperties);
-      console.log(filteredProperties);
       return;
     } catch (err) {
       console.log(err);

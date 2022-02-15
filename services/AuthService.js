@@ -14,7 +14,6 @@ class AuthService
     }
     register(uuid)
     {
-        console.log(UrlProperty + "/" + uuid)
         return axios.get(UrlProperty + "/" + uuid)
     }
     getUser()
