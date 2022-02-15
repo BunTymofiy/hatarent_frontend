@@ -21,6 +21,7 @@ function login() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    document.getElementById("failedLogin").classList.add("hidden");
     const user = new URLSearchParams();
     user.append("email", email);
     user.append("password", password);
@@ -31,8 +32,14 @@ function login() {
         credentials: "include",
         body: user.toString(),
       });
-      router.back();
+      if (res.status === 200) {
+        router.back();
+      }
+      if (res.status === 403) {
+        document.getElementById("failedLogin").classList.remove("hidden");
+      }
     } catch (err) {
+      document.getElementById("failedLogin").classList.remove("hidden");
       console.log(err);
     }
   };
@@ -42,6 +49,12 @@ function login() {
       <main className="h-screen">
         <div className="p-6 rounded-xl shadow-xl bg-white max-w-sm mx-auto ">
           <form onSubmit={onSubmit}>
+            <div className="mb-4 text-center">
+              <span className="text-red-600 hidden" id="failedLogin">
+                {" "}
+                Login Failed. Please try again
+              </span>
+            </div>
             <div className="form-group mb-6">
               <label
                 htmlFor="InputEmail"

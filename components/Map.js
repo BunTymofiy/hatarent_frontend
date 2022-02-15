@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 
 function Map({ longitude, latitude }) {
-  // console.log(longitude, latitude);
   const [viewport, setViewPort] = useState({
     width: "100%",
     height: "33.33%",

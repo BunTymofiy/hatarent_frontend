@@ -2,15 +2,7 @@ function Footer() {
   return (
     <div>
       <div
-        className="
-             text-gray-300 text-center
-             fixed
-             inset-x-0
-             bottom-0
-             p-4
-             bg-purple-800
-             bg-opacity-75
-             "
+        className=" text-gray-300 text-center fixed  inset-x-0 bottom-0  p-4 card glass rounded-none"
       >
         <footer className="p-4 space-x-4 justify-center">
           <h3 className="text-xl font-bold">HATARENT</h3>

@@ -3,8 +3,12 @@ import { useRouter } from "next/router";
 import AuthService from "../services/AuthService";
 import { UserCircleIcon } from "@heroicons/react/solid";
 import Image from "next/image";
+import ReservationService from "../services/ReservationService";
+import { useEffect, useState } from "react";
 
 function Header(props) {
+  const [reservations, setReservations] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
   let headerSpan = 2;
   const router = useRouter();
   let user = props?.user;
@@ -17,12 +21,30 @@ function Header(props) {
     }
   };
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  useEffect(async () => {
+    if (props.user === null || props.user === undefined) return;
+    await getReservations();
+  }, [isMounted]);
+
+  const getReservations = async () => {
+    try {
+      let res = await ReservationService.getReservationsByUser(props.user.uuid);
+      let dataResponse = await res.data;
+      setReservations(dataResponse);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+ 
   const userImage = () => {
     if (user?.image === null) {
       return (
         <div className="dropdown relative h-12 w-12 mr-5 rounded-2xl dropdown-end">
           <UserCircleIcon
-            className="h-12 btn-ghost text-gray-300 cursor-pointer hover:scale-105"
+            className="h-12 btn-ghost mb-3 text-gray-300 cursor-pointer hover:scale-105"
             tabIndex="0"
           />
 
@@ -31,7 +53,9 @@ function Header(props) {
             className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>Account Information</a>
+              <a onClick={() => router.push("/account-info")}>
+                Account Information
+              </a>
             </li>
 
             <li>
@@ -43,20 +67,26 @@ function Header(props) {
     } else {
       return (
         <div className="dropdown relative h-12 w-12 mr-5 rounded-2xl dropdown-end">
-          <Image
-            src={user?.image}
-            layout="fill"
-            alt="user"
-            className="rounded-full btn mb-1 hover:scale-105"
-            tabIndex="0"
-          />
-          ;
+          <div className="mb-3 relative h-12 w-12">
+            <Image
+              src={user?.image}
+              layout="fill"
+              objectFit="cover"
+              alt="user"
+              priority={true}
+              className="rounded-full btn mb-6 hover:scale-105"
+              tabIndex="0"
+            />
+          </div>
+
           <ul
             tabIndex="0"
-            class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+            className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>Account Information</a>
+              <a onClick={() => router.push("/account-info")}>
+                Account Information
+              </a>
             </li>
 
             <li>
@@ -74,27 +104,82 @@ function Header(props) {
         roles.push(user.roles[i].name);
       }
       if (roles.indexOf("ROLE_HOST") > -1) {
-          let roles = [];
-          document.getElementById("hd").classList.remove("grid-cols-2");
-          document.getElementById("hd").classList.add("grid-cols-3");
-          for (let i = 0; i < user.roles.length; i++) {
-            roles.push(user.roles[i].name);
-          }
-          if (roles.indexOf("ROLE_HOST") > -1) {
+        let roles = [];
+        document.getElementById("hd").classList.remove("grid-cols-2");
+        document.getElementById("hd").classList.add("grid-cols-3");
+        for (let i = 0; i < user.roles.length; i++) {
+          roles.push(user.roles[i].name);
+        }
+        if (roles.indexOf("ROLE_HOST") > -1) {
+          return (
+            <div id="" className="items-stretch lg:flex justify-between hidden">
+              <a
+                onClick={() => router.push("/host-calendar")}
+                className="btn btn-ghost rounded-btn hover:bg-blue-800 "
+              >
+                Calendar
+              </a>
+              <a
+                onClick={() => router.push("/host-properties")}
+                className="btn btn-ghost rounded-btn hover:bg-blue-900 "
+              >
+                Properties
+              </a>
+              <a
+                onClick={() => router.push("/host-reservations")}
+                className="btn btn-ghost rounded-btn hover:bg-blue-900 "
+              >
+                Notifications
+              </a>
+            </div>
+          );
+        }
+      }
+    }
+  };
+  const guestButtons = () => {
+    if (user != null) {
+      let roles = [];
+      for (let i = 0; i < user.roles.length; i++) {
+        roles.push(user.roles[i].name);
+      }
+      if (roles.indexOf("ROLE_GUEST") > -1) {
+        let roles = [];
+        document.getElementById("hd").classList.remove("grid-cols-2");
+        document.getElementById("hd").classList.add("grid-cols-3");
+        for (let i = 0; i < user.roles.length; i++) {
+          roles.push(user.roles[i].name);
+        }
+        if (roles.indexOf("ROLE_GUEST") > -1) {
+          if (reservations != null) {
             return (
-              <div id="" className="items-stretch lg:flex justify-between hidden">
-                <a className="btn btn-ghost rounded-btn hover:bg-blue-800 w-1/3">
-                  Calendar
-                </a>
-                <a onClick={() => router.push("/host-properties")} className="btn btn-ghost rounded-btn hover:bg-blue-900 w-1/3">
-                  Properties
-                </a>
-                <a className="btn btn-ghost rounded-btn hover:bg-blue-900 w-1/3">
-                  Notifications
+              <div id="" className="flex justify-center ">
+                <div className="indicator">
+                  <div className="indicator-item badge">
+                    {reservations.length}
+                  </div>
+                  <a
+                    onClick={() => router.push("/guest-reservations")}
+                    className="btn btn-ghost  hover:bg-blue-800 "
+                  >
+                    Reservations
+                  </a>
+                </div>
+              </div>
+            );
+          } else {
+            return (
+              <div id="" className="flex justify-center ">
+                <a
+                  onClick={() => router.push("/guest-reservations")}
+                  className="btn btn-ghost  hover:bg-blue-800 "
+                >
+                  Reservations
                 </a>
               </div>
             );
           }
+        }
       }
     }
   };
@@ -119,7 +204,8 @@ function Header(props) {
         </div>
       </div>
       {/* Middle */}
-        {ownerButtons()}
+      {ownerButtons()}
+      {guestButtons()}
       {/* Right */}
       <div className="flex items-center space-x-4 justify-end text-gray-800">
         {!user && (

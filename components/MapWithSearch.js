@@ -32,7 +32,6 @@ function MapWithSearch(props) {
   );
   useEffect(() => {
     if (props.mapValue === null || props.mapValue === undefined) return;
-    // console.log(props.mapValue)
     setAddress(props.mapValue);
     setAddressRaw(AddressHandler.getAddressString(props.mapValue));
   });

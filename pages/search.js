@@ -15,7 +15,9 @@ function Search() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [user, setUser] = useState(null);
-
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [numOfGuests, setNumOfGuests] = useState(null);
   async function getData(location, numberOfGuests) {
     try {
       const searchAddress = AddressHandler.getSearchAddressQuery(location);
@@ -47,6 +49,9 @@ function Search() {
   useEffect(() => {
     if (!router?.isReady) return;
     const { location, startDate, endDate, numberOfGuests } = router.query;
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setNumOfGuests(numberOfGuests);
     const formattedStartDate = format(new Date(startDate), "dd MMMM yyyy");
     const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
     const range = `${formattedStartDate} - ${formattedEndDate}`;
@@ -87,7 +92,12 @@ function Search() {
       {loader}
       <main className="flex">
         <section className="flex-grow pt-14 pl-6">
-        <button onClick={() => router.push("/")} className="text-gray-200 mb-4 btn btn-outline btn-sm">Back to homepage</button>
+          <button
+            onClick={() => router.push("/")}
+            className="text-gray-200 mb-4 btn btn-outline btn-sm"
+          >
+            Back to homepage
+          </button>
           <div className="flex flex-col">
             {data?.map((propertyFound) => (
               <div
@@ -95,7 +105,12 @@ function Search() {
                 onClick={() => {
                   router.push({
                     pathname: "/info",
-                    query: { uuid: propertyFound.uuid },
+                    query: {
+                      uuid: propertyFound.uuid,
+                      startDate: startDate,
+                      endDate: endDate,
+                      numberOfGuests: numOfGuests,
+                    },
                   });
                 }}
               >

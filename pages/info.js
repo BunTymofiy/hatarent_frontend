@@ -7,6 +7,7 @@ import AddressHandler from "../helper/AddressHandler";
 import PropertyService from "../services/PropertyService";
 import Map from "../components/Map";
 import AuthService from "../services/AuthService";
+import { differenceInCalendarDays, format } from "date-fns";
 
 export default function info(props) {
   const router = new useRouter();
@@ -23,7 +24,12 @@ export default function info(props) {
   const [address, setAddress] = useState(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [numOfGuests, setNumOfGuests] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [numOfDays, setNumOfDays] = useState(null);
+  
   async function getData() {
     try {
       setLoading(true);
@@ -38,6 +44,8 @@ export default function info(props) {
       setHostUserUuid(dataResponse.hostUserUuid);
       setImages(dataResponse.images);
       setAddress(dataResponse.address);
+      setPrice(dataResponse.price);
+
     } catch (e) {
       console.log(e);
     } finally {
@@ -56,6 +64,17 @@ export default function info(props) {
   useEffect(() => {
     if (!router?.isReady) return;
     getData();
+    const { location, startDate, endDate, numberOfGuests } = router.query;
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setNumOfGuests(numberOfGuests);
+    if(startDate && endDate && numberOfGuests) {
+    const formattedStartDate = format(new Date(startDate), "dd MMMM yyyy");
+    const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
+    const range = `${formattedStartDate} - ${formattedEndDate}`;
+    setNumOfDays(differenceInCalendarDays(new Date(endDate), new Date(startDate)));
+    router.query;
+    }
   }, [router.isReady]);
 
   useEffect(async () => {
@@ -77,30 +96,60 @@ export default function info(props) {
         roles.push(user.roles[i].name);
       }
       if (roles.indexOf("ROLE_HOST") > -1) {
-        if(hostUserUuid === user.uuid)
-        return (
-          <div>
-            <button
-              className="btn btn-primary mr-2"
-              id="update"
-              onClick={() => {
-                router.push({
-                  pathname: "/update-property",
-                  query: { uuid: uuid },
-                });
-              }}
-            >
-              Update Information
-            </button>
-            <button className="btn" onClick={handleDelete}>
-              Delete Property
-            </button>
-          </div>
-        );
+        if (hostUserUuid === user.uuid)
+          return (
+            <div>
+              <button
+                className="btn btn-primary mr-2"
+                id="update"
+                onClick={() => {
+                  router.push({
+                    pathname: "/update-property",
+                    query: { uuid: uuid },
+                  });
+                }}
+              >
+                Update Information
+              </button>
+              <button className="btn" onClick={handleDelete}>
+                Delete Property
+              </button>
+            </div>
+          );
       }
     }
   };
-
+  const reservationButton = () => {
+    let roles = [];
+    if (user != null) {
+      for (let i = 0; i < user.roles.length; i++) {
+        roles.push(user.roles[i].name);
+      }
+    }
+    if (user == null || roles.indexOf("ROLE_GUEST") > -1) {
+      return (
+        <div>
+          <button
+            className="btn btn-primary mt-3 mr-2"
+            id="reservation"
+            onClick={() => {
+              router.push({
+                pathname: "/reservation",
+                query: {
+                  uuid: uuid,
+                  startDate: startDate,
+                  endDate: endDate,
+                  numberOfGuests: numOfGuests,
+                },
+              });
+            }}
+          >
+            Reserve
+          </button>
+        </div>
+      );
+    }
+  };
   const handleDelete = async () => {
     try {
       let res = await PropertyService.deleteProperty(uuid);
@@ -165,12 +214,12 @@ export default function info(props) {
       <main className="h-screen">
         {loader}
         <div className="container mx-auto px-4 font-serif">
-          <div className="card card-normal mx-auto  bg-slate-300">
-            <h2 className="text-center text-gray-500 text-xl p-2 font-semibold">
+          <div className="card glass text-gray-200 card-normal mx-auto w-auto">
+            <h2 className="text-center card-title text-neutral-content capitalize text-xl p-2 font-semibold">
               {title}
             </h2>
             <div className="flex flex-col items-center mt-10">
-              <div className="bg-gray-200 rounded-3xl  p-4 bg-opacity-80 mb-5">
+              <div className="rounded-3xl p-4 bg-opacity-80 mb-5">
                 <div className="relative w-min mx-auto">
                   <div className="w-full max-w mx-auto">
                     <div className=" h-96 min-w-[500px] carousel">
@@ -182,8 +231,10 @@ export default function info(props) {
                   </div>
                 </div>
                 <h2 className="font-semibold ">Description</h2>
-                <p className="text-xs">{description}</p>
-                <div className="border-t border-slate-500 mt-2 mb-2" />
+                <div className="w-[500px]">
+                  <p className="text-xs">{description}</p>
+                </div>
+                <div className="border-t border-slate-200 mt-2 mb-2" />
                 <div className="grid grid-cols-2  mt-2">
                   <div>
                     <h2 className="font-semibold ">Details</h2>
@@ -196,8 +247,12 @@ export default function info(props) {
                       )}
                       <p>Contact Person: {contact_person}</p>
                       <p>Email: {email}</p>
+                      <p className="text-xl">Price: {price}$</p>
+                      <p className="text-2xl">Your total price: {price * numOfDays}$</p>
                     </div>
+                    
                     {ownerButtons()}
+                    {reservationButton()}
                   </div>
                   <div>
                     <div className="relative h-56 w-96 mb-5">
