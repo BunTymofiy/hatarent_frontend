@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 
 function Transaction({ transaction,userType }) {
+  console.log(transaction)
   const property = transaction.invoice.reservation.property;
   let type = null;
   if (userType === "guest") 
