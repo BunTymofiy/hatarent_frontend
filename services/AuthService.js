@@ -26,7 +26,7 @@ class AuthService
     }
     logout()
     {
-        return axios.head('https://hatarent-frontend.vercel.app./api/logout')
+        return axios.head('https://hatarent-frontend.vercel.app/api/logout')
     }
     getUserByUuid(uuid)
     {
