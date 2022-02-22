@@ -74,30 +74,6 @@ function Reservation() {
         status: "pending",
       };
       await ReservationService.createReservation(reservation);
-      let currentDate = startDate;
-      let nights = [];
-      while(isBefore(new Date(currentDate), new Date(endDate)) || isEqual(new Date(currentDate), new Date(endDate))) {
-        let night = {
-          property: {
-            uuid: uuid,
-            hostUserUuid: hostUserUuid,
-            title: title,
-            guestLimit: guestLimit,
-            description: description,
-            contact_person: contact_person,
-            email: email,
-            images: images,
-            address: address,
-            price: price,
-          },
-          date: new Date(currentDate),
-          price: price,
-          state: "pending",
-        }
-        nights.push(night);
-        currentDate = addDays(new Date(currentDate), 1);
-      }
-        await NightsService.createNightsBulk(nights);
         router.push('/guest-reservations');
     } catch (e) {
       console.log(e);

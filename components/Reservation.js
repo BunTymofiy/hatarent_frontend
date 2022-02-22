@@ -4,12 +4,15 @@ import { useRouter } from "next/router";
 import React from "react";
 import Stripe from "stripe";
 import {loadStripe} from '@stripe/stripe-js';
+import AddressHandler from "../helper/AddressHandler";
 
 const stripePromise = loadStripe("pk_test_51KSnJYGzTAX7NDbOSi0s27DkSTtk8Rk3vUsnYAmFeTngRsq0To4hvBIy0ou9u2rDgsEKWxxc8r0he3flbFatwrw60020fMtAI4");
 
 function Reservation(props) {
   const reservation = props.reservation;
   const property = reservation.property;
+  const reservationId = reservation.reservationId;
+  const reservationDisplay = reservationId.substring(reservationId.length - 8).toUpperCase();
   const router = new useRouter();
   const handlePayClick = async (e) => {
     e.preventDefault();
@@ -69,6 +72,12 @@ function Reservation(props) {
         <h4 className="text-xl capitalize" id="title">
           {property.title}
         </h4>
+        <p className="">
+          Address {AddressHandler.getAddressString(property.address)}
+        </p>
+        <p className="">
+          Reservation Number: {reservationDisplay}
+        </p>
         <div className="flex justify-between">
           <p>
             Check In date:{" "}

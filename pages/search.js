@@ -18,17 +18,21 @@ function Search() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [numOfGuests, setNumOfGuests] = useState(null);
-  async function getData(location, numberOfGuests) {
+
+  async function getData(location, startDate, endDate, numberOfGuests) {
     try {
       const searchAddress = AddressHandler.getSearchAddressQuery(location);
       setLoading(true);
       setData(null);
-      let res = await PropertyService.getProperties();
-      let dataResponse = res.data;
-      const filteredProperties = dataResponse.filter((property) =>
-        checkIfLocationMach(property, searchAddress, numberOfGuests)
-      );
-      setData(filteredProperties);
+      // let res = await PropertyService.getProperties();
+      let res = await PropertyService.getPropertiesByCityDateAndGuest(searchAddress.city, startDate, endDate, numberOfGuests).then(res => res.data);
+      console.log(res)
+      // let dataResponse = res.data;
+      // const filteredProperties = dataResponse.filter((property) =>
+      //   checkIfLocationMach(property, searchAddress, numberOfGuests)
+      // );
+      // setData(filteredProperties);
+      setData(res);
       return;
     } catch (err) {
       console.log(err);
@@ -56,7 +60,7 @@ function Search() {
     const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
     const range = `${formattedStartDate} - ${formattedEndDate}`;
     router.query;
-    getData(location, numberOfGuests);
+    getData(location, new Date(startDate), new Date(endDate), numberOfGuests);
   }, [router.isReady]);
 
   useEffect(async () => {
@@ -85,6 +89,39 @@ function Search() {
       </div>
     );
   }
+  let mapComponent = null;
+  if (data != null && data.length > 0) {
+    mapComponent = <MapMultipleMarkers searchResults={data} />;
+  }
+  let properties = null;
+  if (data != null && data.length > 0) {
+    properties = data?.map((propertyFound) => (
+      <div
+        key={propertyFound.uuid}
+        onClick={() => {
+          router.push({
+            pathname: "/info",
+            query: {
+              uuid: propertyFound.uuid,
+              startDate: startDate,
+              endDate: endDate,
+              numberOfGuests: numOfGuests,
+            },
+          });
+        }}
+      >
+        <Property key={propertyFound.uuid} property={propertyFound} />
+      </div>
+    ));
+  }
+  let noProperties = null;
+  if (data != null && data.length == 0) {
+    noProperties = (
+      <div className="flex lg:justify-end md:justify-center sm:justify-center text-lg text-gray-300 items-center">
+        No properties found 😔 Please adjust location, number of guests or dates
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen">
@@ -99,29 +136,14 @@ function Search() {
             Back to homepage
           </button>
           <div className="flex flex-col">
-            {data?.map((propertyFound) => (
-              <div
-                key={propertyFound.uuid}
-                onClick={() => {
-                  router.push({
-                    pathname: "/info",
-                    query: {
-                      uuid: propertyFound.uuid,
-                      startDate: startDate,
-                      endDate: endDate,
-                      numberOfGuests: numOfGuests,
-                    },
-                  });
-                }}
-              >
-                <Property key={propertyFound.uuid} property={propertyFound} />
-              </div>
-            ))}
+            {noProperties}
+
+            {properties}
           </div>
         </section>
         <section className="hidden pt-14 flex-col  pr-6 lg:inline-flex lg:min-w-[600px]">
           <div className="text-transparent text-lg mb-5">lol</div>
-          {data && <MapMultipleMarkers searchResults={data} />}
+          {mapComponent}
         </section>
       </main>
       <Footer className="" />

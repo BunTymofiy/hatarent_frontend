@@ -9,9 +9,17 @@ class PropertyService
     {
         return axios.get(UrlProperty)
     }
+    getPropertiesByCityDateAndGuest(city, startDate, endDate, numberOfGuests)
+    {
+        return axios.get(UrlProperty + "/" + city + "/" + startDate + "/" + endDate + "/" + numberOfGuests)
+    }
     getByUuidProperty(uuid)
     {
         return axios.get(UrlProperty + "/" + uuid)
+    }
+    getPropertiesByHost(uuid)
+    {
+        return axios.get(UrlProperty + "/user/" + uuid)
     }
     createProperty(property)
     {

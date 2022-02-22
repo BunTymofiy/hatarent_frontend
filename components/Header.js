@@ -38,7 +38,7 @@ function Header(props) {
       console.log(e);
     }
   };
- 
+
   const userImage = () => {
     if (user?.image === null) {
       return (
@@ -57,7 +57,9 @@ function Header(props) {
                 Account Information
               </a>
             </li>
-
+            <li>
+              <a onClick={() => router.push("/transactions")}>Transactions</a>
+            </li>
             <li>
               <a onClick={logoutHandler}>Sign Out</a>
             </li>
@@ -87,6 +89,9 @@ function Header(props) {
               <a onClick={() => router.push("/account-info")}>
                 Account Information
               </a>
+            </li>
+            <li>
+              <a onClick={() => router.push("/transactions")}>Transactions</a>
             </li>
 
             <li>

@@ -28,5 +28,9 @@ class AuthService
     {
         return axios.head('http://localhost:3000/api/logout')
     }
+    getUserByUuid(uuid)
+    {
+        return axios.get(UrlUser + "/info/" + uuid)
+    }
 }
 export default new AuthService()

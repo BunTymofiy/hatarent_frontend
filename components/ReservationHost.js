@@ -11,9 +11,7 @@ function Reservation(props) {
   const router = new useRouter();
   const acceptReservation = async () => {
     try {
-      const response = await NightsService.updateNightsBulk(
-        reservation.reservationId
-      );
+     
       const acceptedReservation = await ReservationService.acceptReservation(
         reservation.reservationId
       );
@@ -24,9 +22,7 @@ function Reservation(props) {
   };
   const declineReservation = async () => {
     try {
-      let deleteNights = await NightsService.deleteNightsBulk(
-        reservation.reservationId
-      );
+      
       let declineReservation = await ReservationService.declineReservation(
         reservation.reservationId
       );
@@ -76,7 +72,7 @@ function Reservation(props) {
     }
   };
   return (
-    <div className=" flex  py-7 px-2 pr-4 border-b first:border-t bg-gradient-to-t from-purple-800 to-blue-900 p-3 ">
+    <div className=" flex  py-7 px-2 pr-4 border-b first:border-t hover:opacity-80 hover:shadow-lg transition duration-200 ease-out  bg-gradient-to-t from-purple-800 to-blue-900 p-3 ">
       <div className="relative h-24 w-40 md:h-52 md:w-80 flex flex-shrink-0">
         {property.images.map((image) => (
           <Image
