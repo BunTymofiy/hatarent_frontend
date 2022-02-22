@@ -18,7 +18,7 @@ function GuestReservations() {
       setLoading(true);
       let res = await ReservationService.getReservationsByUser(userFound.uuid);
       let dataResponse = await res.data;
-   
+
       setReservations(dataResponse);
     } catch (e) {
       console.log(e);
@@ -34,6 +34,13 @@ function GuestReservations() {
     if (isMounted == true) {
       try {
         let userFound = await AuthService.getUser();
+        let roles = [];
+        for (let i = 0; i < userFound.data.roles.length; i++) {
+          roles.push(userFound.data.roles[i].name);
+        }
+        if (roles.indexOf("ROLE_HOST") > -1) {
+          router.push('/host-reservations');
+        }
         setUser(userFound.data);
         getData(userFound.data);
       } catch (e) {
@@ -56,7 +63,28 @@ function GuestReservations() {
       </div>
     );
   }
-
+  let noReservations = null;
+  if (reservations.length == 0) {
+    noReservations = (
+      <div
+        className="flex justify-center text-xl cursor-pointer hover:text-gray-400 text-gray-300 items-center"
+        onClick={() => router.push("/")}
+      >
+        You have no reservations yet 😃 click to search for a property
+      </div>
+    );
+  }
+  let reservationsList = null;
+  if (reservations.length > 0) {
+    reservationsList = reservations?.map((reservation) => (
+      <div
+        key={reservation.reservationId}
+        className="flex flex-col space-y-2"
+      >
+        <Reservation reservation={reservation} />
+      </div>
+    ))
+  }
   return (
     <div className="h-screen">
       <Header user={user} />
@@ -67,12 +95,15 @@ function GuestReservations() {
         </div>
         <div className=" flex">
           <section className="flex-grow pt-14 pl-6 pr-6">
-          <button onClick={() => router.push("/")} className="text-gray-200 mb-4 btn btn-outline btn-sm">Back to homepage</button>
-            {reservations?.map((reservation) => (
-              <div key={reservation.reservationId} className="flex flex-col space-y-2">
-                <Reservation reservation={reservation} />
-              </div>
-            ))}
+            <button
+              onClick={() => router.push("/")}
+              className="text-gray-200 mb-4 btn btn-outline btn-sm"
+            >
+              Back to homepage
+            </button>
+            {reservationsList}
+            {noReservations}
+
           </section>
         </div>
       </main>

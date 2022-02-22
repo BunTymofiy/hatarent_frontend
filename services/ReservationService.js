@@ -16,6 +16,9 @@ class ReservationService {
   getByUuidReservation(uuid) {
     return axios.get(UrlReservation + "/" + uuid);
   }
+  getReservationsByProperty(uuid) {
+    return axios.get(UrlReservation + "/property/" + uuid);
+  }
   createReservation(reservation) {
     return axios.post(UrlReservation, reservation);
   }

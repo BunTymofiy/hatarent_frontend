@@ -18,12 +18,9 @@ function HostProperties() {
     try {
       setLoading(true);
       setData(null);
-      let res = await PropertyService.getProperties();
+      let res = await PropertyService.getPropertiesByHost(userFound.uuid);
       let dataResponse = res.data;
-      const filteredProperties = dataResponse.filter((property) =>
-        checkIfPropertyIsOwners(property,userFound)
-      );
-      setData(filteredProperties);
+      setData(dataResponse);
       return;
     } catch (err) {
       console.log(err);
@@ -31,12 +28,6 @@ function HostProperties() {
       setLoading(false);
       setIsMounted(true);
     }
-  }
-  function checkIfPropertyIsOwners(property,userFound) {
-    if (property.hostUserUuid === userFound.uuid) {
-      return property;
-    }
-    return null;
   }
   useEffect(async () => {
     setIsMounted(true);
@@ -77,12 +68,14 @@ function HostProperties() {
     <div className="h-screen">
       <Header user={user} />
       {loader}
-      <main className="flex">
-        <section className="flex-grow pt-14 pl-6">
+      <main className="flex ">
+        
+        <section className="flex-grow overflow-auto pt-14 pl-6">
           <button onClick={() => router.push("/")} className="text-gray-200 mb-4 btn btn-outline btn-sm">Back to homepage</button>
-          <div className="flex flex-col">
+          <div className="flex flex-col overflow-auto">
             {data?.map((propertyFound) => (
               <div
+              className=""
                 key={propertyFound.uuid}
                 onClick={() => {
                   router.push({

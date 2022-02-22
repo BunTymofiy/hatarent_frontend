@@ -2,6 +2,11 @@ const { test, expect, playwright, chromium } = require("@playwright/test");
 
 test("Create a new property", async ({ page }) => {
   await page.goto("http://localhost:3000/add-property");
+  await page.click("#InputEmail");
+  await page.type("#InputEmail", "host@gmail.com");
+  await page.click("#InputPassword");
+  await page.type("#InputPassword", "host");
+  await page.click("#Login");
   await page.click("#title");
   await page.type("#title", "TestProperty");
   await page.click("#guestLimit");
@@ -23,16 +28,21 @@ test("Create a new property", async ({ page }) => {
 });
 
 test("Check info a property", async ({ page }) => {
-  await page.goto("http://localhost:3000/search");
-  await page.click("text=TestProperty");
+  await page.goto("http://localhost:3000/search?location=Longueuil%2C+Quebec%2C+Canada&startDate=2022-06-01T04%3A00%3A00.000Z&endDate=2022-06-04T04%3A00%3A00.000Z&numberOfGuests=1");
+  await page.click("text=HostProperty1");
   await page.waitForNavigation({ waitUntil: "networkidle0" });
   const url = page.url();
   expect(url).toContain("/info");
 });
 
 test("Update property", async ({ page }) => {
-  await page.goto("http://localhost:3000/search");
-  await page.click("text=TestProperty");
+  await page.goto("http://localhost:3000/host-properties");
+  await page.click("#InputEmail");
+  await page.type("#InputEmail", "host@gmail.com");
+  await page.click("#InputPassword");
+  await page.type("#InputPassword", "host");
+  await page.click("#Login");
+  await page.click("text=HostProperty1");
   await page.click("#update");
   await page.click("#title");
   await page.type("#title", "TestPropertyUpdated");

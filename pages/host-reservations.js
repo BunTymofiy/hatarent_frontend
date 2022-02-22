@@ -30,7 +30,7 @@ function HostReservations() {
       setIsMounted(true);
     }
   }
-  
+
   useEffect(async () => {
     setIsMounted(true);
   }, []);
@@ -38,6 +38,13 @@ function HostReservations() {
     if (isMounted == true) {
       try {
         let userFound = await AuthService.getUser();
+        let roles = [];
+        for (let i = 0; i < userFound.data.roles.length; i++) {
+          roles.push(userFound.data.roles[i].name);
+        }
+        if (roles.indexOf("ROLE_GUEST") > -1) {
+          router.push('/guest-reservations');
+        }
         setUser(userFound.data);
         getData(userFound.data);
       } catch (e) {
@@ -64,6 +71,27 @@ function HostReservations() {
       </div>
     );
   }
+  let reservationsList = null;
+  if (reservations.length > 0) {
+    reservationsList = reservations?.map((reservation) => (
+      <div onClick={() => router.push({ 
+        pathname: "/show-reservation",
+        query: { id: reservation.reservationId }
+       })}
+       key={reservation.reservationId} className="flex flex-col space-y-2">
+        <ReservationHost pathname={pathname} reservation={reservation} />
+      </div>
+    ));
+  }
+  let noReservations = null;
+  if (reservations.length == 0) {
+    noReservations = (
+      <div className="flex justify-center text-xl  text-gray-300 items-center">
+      You have no reservations yet 😔
+    </div>
+    );
+  }
+
   return (
     <div className="h-screen">
       {loader}
@@ -80,16 +108,12 @@ function HostReservations() {
             >
               Back to homepage
             </button>
-            {reservations?.map((reservation) => (
-              <div
-                key={reservation.reservationId}
-                className="flex flex-col space-y-2"
-              >
-                <ReservationHost pathname={pathname} reservation={reservation} />
-              </div>
-            ))}
+            
+            {reservationsList}
           </section>
         </div>
+      {noReservations}
+
       </main>
       <Footer />
     </div>

@@ -111,9 +111,9 @@ export default function info(props) {
               >
                 Update Information
               </button>
-              <button className="btn" onClick={handleDelete}>
+              {/* <button className="btn" onClick={handleDelete}>
                 Delete Property
-              </button>
+              </button> */}
             </div>
           );
       }
