@@ -9,8 +9,8 @@ export default async (req, res) => {
 
     try{
         const session = await stripe.checkout.sessions.create({
-            success_url:"http://localhost:3000/guest-reservations?id=${CHECKOUT_SESSION_ID}",
-            cancel_url:"http://localhost:3000/guest-reservations",
+            success_url:"https://hatarent-frontend.vercel.app/guest-reservations?id=${CHECKOUT_SESSION_ID}",
+            cancel_url:"https://hatarent-frontend.vercel.app/guest-reservations",
             mode: "payment",
             payment_method_types: ["alipay","card"],
             line_items: [{
