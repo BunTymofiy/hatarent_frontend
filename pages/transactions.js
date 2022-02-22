@@ -11,7 +11,6 @@ function Transactions() {
   const [user, setUser] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
   const [transactions, setTransactions] = useState([]);
-  const [userName, setUserName] = useState("");
   const [userType, setUserType] = useState("");
 
   const getData = async (role, user) => {
@@ -21,26 +20,29 @@ function Transactions() {
           user.uuid
         ).then((res) => res.data);
         let transWithUserName = [];
+        let un = {}
         for (let i = 0; i < transactions.length; i++) {
-          let userName = await AuthService.getUserByUuid(transactions[i].senderId).then((res) => res.data);
-          transactions[i]["user"] =  userName;
+          un = await AuthService.getUserByUuid(transactions[i].senderId).then((res) => res.data);
+          transactions[i]["user"] =  un;
           transWithUserName.push(transactions[i]);
           console.log( transactions[i]);
         }
         setTransactions(transWithUserName);
-        setUserName(userName);
         setUserType("guest");
+
       } else if (role === "guest") {
         let transactions = await TransactionService.getTransactionsByUser(
           user.uuid
         ).then((res) => res.data);
-        setTransactions(transactions);
-        let userName = await AuthService.getUserByUuid(
-          transactions.receiverId
-        ).then((res) => res.data);
-        console.log(userName);
-
-        setUserName(userName);
+        let transWithUserName = [];
+        let un = {}
+        for (let i = 0; i < transactions.length; i++) {
+          un = await AuthService.getUserByUuid(transactions[i].senderId).then((res) => res.data);
+          transactions[i]["user"] =  un;
+          transWithUserName.push(transactions[i]);
+          console.log( transactions[i]);
+        }
+        setTransactions(transWithUserName);
         setUserType("host");
       }
       (res) => res.data;
