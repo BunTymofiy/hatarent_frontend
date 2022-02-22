@@ -26,7 +26,7 @@ class AuthService
     }
     logout()
     {
-        return axios.head(url + 'logout')
+        return axios.head(url + 'logout',{withCredentials:true})
     }
     getUserByUuid(uuid)
     {
