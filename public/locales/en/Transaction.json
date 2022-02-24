@@ -1,0 +1,10 @@
+{
+  "check_in_date": "Check In date",
+  "check_out_date": "Check Out date",
+  "email": "Email",
+  "name": "Name",
+  "total_paid": "Total Paid",
+  "transaction_date": "Transaction Date",
+  "host": "Host",
+  "guest": "Guest"
+}

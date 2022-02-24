@@ -4,8 +4,31 @@ import Header from "../components/Header";
 import InputWarningHelper from "../services/InputWarningHelper";
 import { url } from "../constants/urls";
 import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["login","Footer", "Header"])),
+    },
+  };
+}
 
 function login() {
+  const { t } = useTranslation();
+  const hatarent = t("Footer:hatarent");
+  const owner_name = t("Footer:owner_name");
+  const account_information = t("Header:account_information");
+  const become_host = t("Header:become_host");
+  const calendar = t("Header:calendar");
+  const hatarent_logo = t("Header:hatarent");
+  const notifications = t("Header:notifications");
+  const properties = t("Header:properties");
+  const reservations = t("Header:reservations");
+  const sign_in = t("Header:sign_in");
+  const sign_out = t("Header:sign_out");
+  const transactions = t("Header:transactions");
   const router = new useRouter();
   const loginUrl = url + "login";
   const [email, setEmail] = useState("");
@@ -45,14 +68,14 @@ function login() {
   };
   return (
     <div>
-      <Header />
+      <Header account_information={account_information} become_host={become_host} calendar={calendar} notifications={notifications} hatarent={hatarent_logo} properties={properties} reservationsN={reservations} sign_in={sign_in} sign_out={sign_out} transactions={transactions} />
       <main className="h-screen">
         <div className="p-6 rounded-xl shadow-xl bg-white max-w-sm mx-auto ">
           <form onSubmit={onSubmit}>
             <div className="mb-4 text-center">
               <span className="text-red-600 hidden" id="failedLogin">
                 {" "}
-                Login Failed. Please try again
+                {t("login:login_failed")}
               </span>
             </div>
             <div className="form-group mb-6">
@@ -60,7 +83,7 @@ function login() {
                 htmlFor="InputEmail"
                 className="form-label inline-block mb-2 text-gray-700"
               >
-                Email address
+                {t("login:email_address")}
               </label>
               <input
                 type="email"
@@ -69,19 +92,19 @@ function login() {
                 onBlur={(e) => InputWarningHelper.onBlur(e)}
                 className="form-control input w-full border border-solid border-gray-300"
                 id="InputEmail"
-                placeholder="Enter email"
+                placeholder={t("login:enter_email_placeholder")}
               />
               <small
                 id="InputEmailWarning"
                 className="hidden mt-1 text-xs text-red-600"
               >
-                Please enter your email address
+                {t("login:enter_email_address")}
               </small>
               <small
                 id="EmailHelp"
                 className="block mt-1 text-xs text-gray-600"
               >
-                We'll never share your email with anyone else.
+                {t("login:never_share_email")}
               </small>
             </div>
             <div className="form-group mb-6">
@@ -89,7 +112,7 @@ function login() {
                 htmlFor="InputPassword"
                 className="form-label inline-block mb-2 text-gray-700"
               >
-                Password
+                {t("login:password")}
               </label>
               <input
                 type="password"
@@ -98,13 +121,13 @@ function login() {
                 onBlur={(e) => InputWarningHelper.onBlur(e)}
                 className="form-control input w-full border border-solid border-gray-300"
                 id="InputPassword"
-                placeholder="Password"
+                placeholder={t("login:password")}
               />
               <small
                 id="InputPasswordWarning"
                 className="hidden mt-1 text-xs text-red-600"
               >
-                Please enter your password
+                {t("login:please_enter_password")}
               </small>
             </div>
 
@@ -113,7 +136,7 @@ function login() {
               type="submit"
               className=" btn btn-primary w-full"
             >
-              Login
+              {t("login:login")}
             </button>
           </form>
           <div className="text-center">
@@ -126,12 +149,12 @@ function login() {
                 });
               }}
             >
-              Create new account
+              {t("login:create_new_account")}
             </a>
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer hatarent={hatarent} owner_name={owner_name}/>
     </div>
   );
 }

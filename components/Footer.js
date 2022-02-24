@@ -1,12 +1,12 @@
-function Footer() {
+function Footer({owner_name, hatarent}) {
   return (
     <div>
       <div
         className=" text-gray-300 text-center fixed  inset-x-0 bottom-0  p-4 card glass rounded-none"
       >
         <footer className="p-4 space-x-4 justify-center">
-          <h3 className="text-xl font-bold">HATARENT</h3>
-          <a className="text-sm">Valeriy Zyuba </a>
+          <h3 className="text-xl font-bold">{hatarent}</h3>
+          <a className="text-sm">{owner_name}</a>
           <a className="text-sm">|</a>
           <a
             className="cursor-pointer text-sm hover:text-gray-500 hover:scale-105 transform transition duration-300 ease-out"

@@ -1,0 +1,16 @@
+{
+  "email_address": "Adresse e-mail",
+  "first_name": "Prénom",
+  "last_name": "Nom de famille",
+  "login": "Connexion",
+  "password": "Mot de passe",
+  "passwords_must_match": "les mots de passe doivent correspondre",
+  "please_enter_email_address": "Veuillez saisir votre adresse e-mail",
+  "please_enter_first_name": "Entrez votre prénom s'il vous plait",
+  "please_enter_last_name": "Veuillez entrer votre nom de famille",
+  "please_enter_password": "Veuillez entrer un mot de passe",
+  "please_enter_username": "s'il vous plaît entrez votre nom d'utilisateur",
+  "repeat_password": "Répéter le mot de passe",
+  "sign_up": "S'inscrire",
+  "user_name": "Nom d'utilisateur"
+}

@@ -1,0 +1,12 @@
+{
+  "address": "Address",
+  "check_in_date": "Check In date",
+  "check_out_date": "Check Out date",
+  "pay": "Pay",
+  "price": "Price",
+  "reservation_number": "Reservation Number",
+  "accepted": "Accepted",
+  "declined": "Declined",
+  "pending": "Pending",
+  "paid": "Paid"
+}

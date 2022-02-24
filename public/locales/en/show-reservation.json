@@ -1,0 +1,14 @@
+{
+  "check-in_date": "Check In Date",
+  "check_out_date": "Check Out Date",
+  "email": "Email",
+  "number_of_guests": "Number of Guests",
+  "property": "Property",
+  "reservation": "Reservation",
+  "reserved_by": "Reserved by",
+  "total_price": "Total price",
+  "pending": "Pending",
+  "accept": "Accept",
+  "decline": "Decline",
+  "paid": "Paid"
+}

@@ -1,0 +1,16 @@
+{
+  "email_address": "Email address",
+  "first_name": "First name",
+  "last_name": "Last name",
+  "login": "Login",
+  "password": "Password",
+  "passwords_must_match": "Passwords must match",
+  "please_enter_email_address": "Please enter your email address",
+  "please_enter_first_name": "Please enter your first name",
+  "please_enter_last_name": "Please enter your last name",
+  "please_enter_password": "Please enter a password",
+  "please_enter_username": "Please enter your username",
+  "repeat_password": "Repeat Password",
+  "sign_up": "Sign up",
+  "user_name": "User name"
+}

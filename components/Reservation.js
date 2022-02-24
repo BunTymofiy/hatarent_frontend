@@ -8,8 +8,7 @@ import AddressHandler from "../helper/AddressHandler";
 
 const stripePromise = loadStripe("pk_test_51KSnJYGzTAX7NDbOSi0s27DkSTtk8Rk3vUsnYAmFeTngRsq0To4hvBIy0ou9u2rDgsEKWxxc8r0he3flbFatwrw60020fMtAI4");
 
-function Reservation(props) {
-  const reservation = props.reservation;
+function Reservation({reservation,reservation_number,address, accepted, declined, paid, check_in_date, check_out_date, price, pending}) {
   const property = reservation.property;
   const reservationId = reservation.reservationId;
   const reservationDisplay = reservationId.substring(reservationId.length - 8).toUpperCase();
@@ -35,21 +34,21 @@ function Reservation(props) {
     if (reservation.status === "pending") {
       return (
         <button className="btn btn-disabled capitalize text-gray-300  shadow-xl">
-          {reservation.status}
+          {pending}
         </button>
       );
     } else if (reservation.status === "accepted") {
-      return <button onClick={handlePayClick} className="btn btn-warning capitalize">Pay</button>;
+      return <button onClick={handlePayClick} className="btn btn-warning capitalize">{pay}</button>;
     } else if (reservation.status === "declined") {
       return (
         <button className="btn btn-disabled btn-error capitalize">
-          {reservation.status}
+          {declined}
         </button>
       );
     }else if (reservation.status === "paid") {
       return (
-        <button className="btn btn-accent btn-disabled  capitalize">
-          {reservation.status}
+        <button className="btn btn-accent btn-disabled capitalize">
+          {paid}
         </button>
       );
     }
@@ -73,20 +72,20 @@ function Reservation(props) {
           {property.title}
         </h4>
         <p className="">
-          Address {AddressHandler.getAddressString(property.address)}
+          {address}: {AddressHandler.getAddressString(property.address)}
         </p>
         <p className="">
-          Reservation Number: {reservationDisplay}
+          {reservation_number}: {reservationDisplay}
         </p>
         <div className="flex justify-between">
           <p>
-            Check In date:{" "}
+            {check_in_date}:{" "}
             {format(new Date(reservation.checkInDate), "dd MMMM yyyy")}
           </p>
         </div>
         <div className="flex justify-between">
           <p>
-            Check Out date:{" "}
+            {check_out_date}:{" "}
             {format(new Date(reservation.checkOutDate), "dd MMMM yyyy")}
           </p>
         </div>
@@ -99,7 +98,7 @@ function Reservation(props) {
         <div className="flex justify-between items-end pt-5">
           <div>
             <p className="text-lg font-semibold pb-2 lg:text-2xl">
-              Price: {reservation.totalPrice}$
+              {price}: {reservation.totalPrice}$
             </p>
             {/* <p className=" font-extralight">Total</p> */}
           </div>

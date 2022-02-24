@@ -1,0 +1,16 @@
+{
+  "email_address": "Адрес электронной почты",
+  "first_name": "Имя",
+  "last_name": "Фамилия",
+  "login": "Авторизоваться",
+  "password": "Пароль",
+  "passwords_must_match": "Пароли должны совпадать",
+  "please_enter_email_address": "Пожалуйста, введите свой адрес электронной почты",
+  "please_enter_first_name": "Пожалуйста, введите ваше имя",
+  "please_enter_last_name": "Пожалуйста, введите свою фамилию",
+  "please_enter_password": "Пожалуйста, введите пароль",
+  "please_enter_username": "Пожалуйста, введите имя пользователя",
+  "repeat_password": "Повторите пароль",
+  "sign_up": "Зарегистрироваться",
+  "user_name": "Имя пользователя"
+}

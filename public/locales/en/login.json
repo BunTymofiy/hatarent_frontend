@@ -1,0 +1,12 @@
+{
+  "create_new_account": "Create new account",
+  "email_address": "Email address",
+  "enter_email_address": "Please enter your email address",
+  "enter_email_placeholder": "Enter email",
+  "enter_password": "Enter Password",
+  "login": "Login",
+  "login_failed": "Login Failed. Please try again",
+  "never_share_email": "We'll never share your email with anyone else.",
+  "password": "Password",
+  "please_enter_password": "Please enter your password"
+}

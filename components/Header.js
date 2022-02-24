@@ -6,12 +6,25 @@ import Image from "next/image";
 import ReservationService from "../services/ReservationService";
 import { useEffect, useState } from "react";
 
-function Header(props) {
+function Header({
+  user,
+  account_information,
+  become_host,
+  calendar,
+  hatarent,
+  notifications,
+  properties,
+  reservationsN,
+  sign_in,
+  sign_out,
+  transactions,
+}) {
   const [reservations, setReservations] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [locale, setLocale] = useState();
   let headerSpan = 2;
   const router = useRouter();
-  let user = props?.user;
+  const { pathname, asPath, query } = router
   const logoutHandler = async () => {
     try {
       await AuthService.logout();
@@ -25,13 +38,17 @@ function Header(props) {
     setIsMounted(true);
   }, []);
   useEffect(async () => {
-    if (props.user === null || props.user === undefined) return;
+    if (user === null || user === undefined) return;
     await getReservations();
   }, [isMounted]);
 
+  useEffect(() => {
+    if (!router?.isReady) return;
+    setLocale(router.locale)
+  }, [router.isReady]);
   const getReservations = async () => {
     try {
-      let res = await ReservationService.getReservationsByUser(props.user.uuid);
+      let res = await ReservationService.getReservationsByUser(user.uuid);
       let dataResponse = await res.data;
       setReservations(dataResponse);
     } catch (e) {
@@ -54,14 +71,14 @@ function Header(props) {
           >
             <li>
               <a onClick={() => router.push("/account-info")}>
-                Account Information
+                {account_information}
               </a>
             </li>
             <li>
-              <a onClick={() => router.push("/transactions")}>Transactions</a>
+              <a onClick={() => router.push("/transactions")}>{transactions}</a>
             </li>
             <li>
-              <a onClick={logoutHandler}>Sign Out</a>
+              <a onClick={logoutHandler}>{sign_out}</a>
             </li>
           </ul>
         </div>
@@ -87,15 +104,15 @@ function Header(props) {
           >
             <li>
               <a onClick={() => router.push("/account-info")}>
-                Account Information
+                {account_information}
               </a>
             </li>
             <li>
-              <a onClick={() => router.push("/transactions")}>Transactions</a>
+              <a onClick={() => router.push("/transactions")}>{transactions}</a>
             </li>
 
             <li>
-              <a onClick={logoutHandler}>Sign Out</a>
+              <a onClick={logoutHandler}>{sign_out}</a>
             </li>
           </ul>
         </div>
@@ -122,19 +139,19 @@ function Header(props) {
                 onClick={() => router.push("/host-calendar")}
                 className="btn btn-ghost rounded-btn hover:bg-blue-800 "
               >
-                Calendar
+                {calendar}
               </a>
               <a
                 onClick={() => router.push("/host-properties")}
                 className="btn btn-ghost rounded-btn hover:bg-blue-900 "
               >
-                Properties
+                {properties}
               </a>
               <a
                 onClick={() => router.push("/host-reservations")}
                 className="btn btn-ghost rounded-btn hover:bg-blue-900 "
               >
-                Notifications
+                {notifications}
               </a>
             </div>
           );
@@ -142,6 +159,7 @@ function Header(props) {
       }
     }
   };
+  
   const guestButtons = () => {
     if (user != null) {
       let roles = [];
@@ -167,7 +185,7 @@ function Header(props) {
                     onClick={() => router.push("/guest-reservations")}
                     className="btn btn-ghost  hover:bg-blue-800 "
                   >
-                    Reservations
+                    {reservationsN}
                   </a>
                 </div>
               </div>
@@ -179,7 +197,7 @@ function Header(props) {
                   onClick={() => router.push("/guest-reservations")}
                   className="btn btn-ghost  hover:bg-blue-800 "
                 >
-                  Reservations
+                  {reservationsN}
                 </a>
               </div>
             );
@@ -187,6 +205,10 @@ function Header(props) {
         }
       }
     }
+  };
+  const selectLocale = (e) => {
+    let localeGot = e.target.value;
+    router.push({ pathname, query }, asPath, { locale: localeGot })
   };
   return (
     <header
@@ -204,7 +226,7 @@ function Header(props) {
         >
           <HomeIcon className="h-9 flex-none justify-start  " />
           <p className="text-3xl font-bold select-none justify-left ml-2 mr-4">
-            Hatarent
+            {hatarent}
           </p>
         </div>
       </div>
@@ -213,6 +235,16 @@ function Header(props) {
       {guestButtons()}
       {/* Right */}
       <div className="flex items-center space-x-4 justify-end text-gray-800">
+        {locale && <select
+          onChange={(e) => selectLocale(e)}
+          className="select max-w-xs select-info"
+          defaultValue={locale}
+        >
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="uk">Український</option>
+          <option value="ru">Русский</option>
+        </select>}
         {!user && (
           <div className="relative flex  items-center align-middle">
             <div
@@ -224,17 +256,18 @@ function Header(props) {
               }}
               className="flex mr-5 cursor-pointer hover:scale-105"
             >
-              <p className="hidden md:inline  text-white">Become a host</p>
+              <p className="hidden md:inline  text-white">{become_host}</p>
               <GlobeAltIcon className="h-6  text-white" />
             </div>
             <button
               className="btn btn-ghost text-white hover:scale-105 active:bg-blue-800"
               onClick={() => router.push("/login")}
             >
-              Sign In
+              {sign_in}
             </button>
           </div>
         )}
+
         {user && userImage()}
       </div>
     </header>

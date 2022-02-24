@@ -1,0 +1,16 @@
+{
+  "email_address": "Адреса електронної пошти",
+  "first_name": "Ім'я",
+  "last_name": "Прізвище",
+  "login": "Увійти",
+  "password": "Пароль",
+  "passwords_must_match": "Паролі повинні збігатися",
+  "please_enter_email_address": "Будь ласка, введіть свою електронну адресу",
+  "please_enter_first_name": "Будь ласка, введіть своє ім'я",
+  "please_enter_last_name": "Будь ласка, введіть своє прізвище",
+  "please_enter_password": "Будь ласка, введіть пароль",
+  "please_enter_username": "Будь ласка, введіть своє ім'я користувача",
+  "repeat_password": "Повторіть пароль",
+  "sign_up": "зареєструватися",
+  "user_name": "Ім'я користувача"
+}

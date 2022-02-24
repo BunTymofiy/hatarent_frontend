@@ -8,8 +8,32 @@ import { useEffect, useState } from "react";
 import AddressHandler from "../helper/AddressHandler";
 import MapMultipleMarkers from "../components/MapMultipleMarkers";
 import AuthService from "../services/AuthService";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["search", "Footer", "Header", "Property"])),
+    },
+  };
+}
 
 function Search() {
+  const { t } = useTranslation();
+  const hatarent = t("Footer:hatarent");
+  const owner_name = t("Footer:owner_name");
+  const account_information = t("Header:account_information");
+  const become_host = t("Header:become_host");
+  const calendar = t("Header:calendar");
+  const hatarent_logo = t("Header:hatarent");
+  const notifications = t("Header:notifications");
+  const propertiesP = t("Header:properties");
+  const reservations = t("Header:reservations");
+  const sign_in = t("Header:sign_in");
+  const sign_out = t("Header:sign_out");
+  const transactions = t("Header:transactions");
+  const price = t("Property:price");
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -25,8 +49,13 @@ function Search() {
       setLoading(true);
       setData(null);
       // let res = await PropertyService.getProperties();
-      let res = await PropertyService.getPropertiesByCityDateAndGuest(searchAddress.city, startDate, endDate, numberOfGuests).then(res => res.data);
-      console.log(res)
+      let res = await PropertyService.getPropertiesByCityDateAndGuest(
+        searchAddress.city,
+        startDate,
+        endDate,
+        numberOfGuests
+      ).then((res) => res.data);
+      console.log(res);
       // let dataResponse = res.data;
       // const filteredProperties = dataResponse.filter((property) =>
       //   checkIfLocationMach(property, searchAddress, numberOfGuests)
@@ -110,7 +139,11 @@ function Search() {
           });
         }}
       >
-        <Property key={propertyFound.uuid} property={propertyFound} />
+        <Property
+          key={propertyFound.uuid}
+          property={propertyFound}
+          price={price}
+        />
       </div>
     ));
   }
@@ -118,14 +151,27 @@ function Search() {
   if (data != null && data.length == 0) {
     noProperties = (
       <div className="flex lg:justify-end md:justify-center sm:justify-center text-lg text-gray-300 items-center">
-        No properties found 😔 Please adjust location, number of guests or dates
+        {t("search:no_properties_found")}
       </div>
     );
   }
 
   return (
     <div className="h-screen">
-      <Header user={user} />
+      <Header
+        user={user}
+        account_information={account_information}
+        become_host={become_host}
+        calendar={calendar}
+        notifications={notifications}
+        hatarent={hatarent_logo}
+        properties={propertiesP}
+        reservationsN={reservations}
+        sign_in={sign_in}
+        sign_out={sign_out}
+        transactions={transactions}
+      />
+
       {loader}
       <main className="flex">
         <section className="flex-grow pt-14 pl-6">
@@ -133,7 +179,7 @@ function Search() {
             onClick={() => router.push("/")}
             className="text-gray-200 mb-4 btn btn-outline btn-sm"
           >
-            Back to homepage
+            {t("search:back_to_homepage")}
           </button>
           <div className="flex flex-col">
             {noProperties}
@@ -146,7 +192,7 @@ function Search() {
           {mapComponent}
         </section>
       </main>
-      <Footer className="" />
+      <Footer hatarent={hatarent} owner_name={owner_name} />
     </div>
   );
 }

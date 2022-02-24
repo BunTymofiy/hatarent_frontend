@@ -1,0 +1,12 @@
+{
+  "address": "Адреса:",
+  "contact_person": "Контактна особа",
+  "description": "Опис",
+  "details": "Деталі",
+  "email": "Електронна пошта",
+  "max_guests": "Максимальна кількість гостей",
+  "price": "Ціна",
+  "reserve": "Резерв",
+  "update_information": "Оновити інформацію",
+  "your_total_price": "Ваша загальна ціна"
+}

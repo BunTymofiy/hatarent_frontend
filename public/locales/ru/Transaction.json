@@ -1,0 +1,10 @@
+{
+  "check_in_date": "Дата заезда",
+  "check_out_date": "Проверить дату",
+  "email": "Эл. адрес",
+  "name": "Имя",
+  "total_paid": "Итого",
+  "transaction_date": "Дата совершения операции",
+  "host": "Хост",
+  "guest": "Гость"
+}

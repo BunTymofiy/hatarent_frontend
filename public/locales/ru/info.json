@@ -1,0 +1,12 @@
+{
+  "address": "Адрес:",
+  "contact_person": "Контактное лицо",
+  "description": "Описание",
+  "details": "Подробности",
+  "email": "Эл. адрес",
+  "max_guests": "Максимальное количество гостей",
+  "price": "Цена",
+  "reserve": "резерв",
+  "update_information": "Обновить информацию",
+  "your_total_price": "Ваша общая цена"
+}

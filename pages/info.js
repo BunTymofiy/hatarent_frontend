@@ -8,8 +8,32 @@ import PropertyService from "../services/PropertyService";
 import Map from "../components/Map";
 import AuthService from "../services/AuthService";
 import { differenceInCalendarDays, format } from "date-fns";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
-export default function info(props) {
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["info", "Footer", "Header"])),
+    },
+  };
+}
+
+export default function info() {
+  const { t } = useTranslation();
+  const hatarent = t("Footer:hatarent");
+  const owner_name = t("Footer:owner_name");
+  const account_information = t("Header:account_information");
+  const become_host = t("Header:become_host");
+  const calendar = t("Header:calendar");
+  const hatarent_logo = t("Header:hatarent");
+  const notifications = t("Header:notifications");
+  const properties = t("Header:properties");
+  const reservations = t("Header:reservations");
+  const sign_in = t("Header:sign_in");
+  const sign_out = t("Header:sign_out");
+  const transactions = t("Header:transactions");
+
   const router = new useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState(null);
@@ -29,7 +53,7 @@ export default function info(props) {
   const [numOfGuests, setNumOfGuests] = useState(null);
   const [price, setPrice] = useState(null);
   const [numOfDays, setNumOfDays] = useState(null);
-  
+
   async function getData() {
     try {
       setLoading(true);
@@ -45,7 +69,6 @@ export default function info(props) {
       setImages(dataResponse.images);
       setAddress(dataResponse.address);
       setPrice(dataResponse.price);
-
     } catch (e) {
       console.log(e);
     } finally {
@@ -68,12 +91,14 @@ export default function info(props) {
     setStartDate(startDate);
     setEndDate(endDate);
     setNumOfGuests(numberOfGuests);
-    if(startDate && endDate && numberOfGuests) {
-    const formattedStartDate = format(new Date(startDate), "dd MMMM yyyy");
-    const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
-    const range = `${formattedStartDate} - ${formattedEndDate}`;
-    setNumOfDays(differenceInCalendarDays(new Date(endDate), new Date(startDate)));
-    router.query;
+    if (startDate && endDate && numberOfGuests) {
+      const formattedStartDate = format(new Date(startDate), "dd MMMM yyyy");
+      const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
+      const range = `${formattedStartDate} - ${formattedEndDate}`;
+      setNumOfDays(
+        differenceInCalendarDays(new Date(endDate), new Date(startDate))
+      );
+      router.query;
     }
   }, [router.isReady]);
 
@@ -109,7 +134,7 @@ export default function info(props) {
                   });
                 }}
               >
-                Update Information
+                {t("info:update_information")}
               </button>
               {/* <button className="btn" onClick={handleDelete}>
                 Delete Property
@@ -144,7 +169,7 @@ export default function info(props) {
               });
             }}
           >
-            Reserve
+            {t("info:reserve")}
           </button>
         </div>
       );
@@ -210,7 +235,20 @@ export default function info(props) {
   }
   return (
     <div>
-      <Header user={user} />
+      <Header
+        user={user}
+        account_information={account_information}
+        become_host={become_host}
+        calendar={calendar}
+        notifications={notifications}
+        hatarent={hatarent_logo}
+        properties={properties}
+        reservationsN={reservations}
+        sign_in={sign_in}
+        sign_out={sign_out}
+        transactions={transactions}
+      />
+
       <main className="h-screen">
         {loader}
         <div className="container mx-auto px-4 font-serif">
@@ -230,27 +268,38 @@ export default function info(props) {
                     </div>
                   </div>
                 </div>
-                <h2 className="font-semibold ">Description</h2>
+                <h2 className="font-semibold ">{t("info:description")}</h2>
                 <div className="w-[500px]">
                   <p className="text-xs">{description}</p>
                 </div>
                 <div className="border-t border-slate-200 mt-2 mb-2" />
                 <div className="grid grid-cols-2  mt-2">
                   <div>
-                    <h2 className="font-semibold ">Details</h2>
+                    <h2 className="font-semibold ">{t("info:details")}</h2>
                     <div className="text-xs">
-                      <p>Max Guests: {guestLimit}</p>
+                      <p>
+                        {t("info:max_guests")}: {guestLimit}
+                      </p>
                       {address && (
                         <div>
-                          Address: {AddressHandler.getAddressString(address)}
+                          {t("info:address")}{" "}
+                          {AddressHandler.getAddressString(address)}
                         </div>
                       )}
-                      <p>Contact Person: {contact_person}</p>
-                      <p>Email: {email}</p>
-                      <p className="text-xl">Price: {price}$</p>
-                      <p className="text-2xl">Your total price: {price * numOfDays}$</p>
+                      <p>
+                        {t("info:contact_person")}: {contact_person}
+                      </p>
+                      <p>
+                        {t("info:email")}: {email}
+                      </p>
+                      <p className="text-xl">
+                        {t("info:price")}: {price}$
+                      </p>
+                      <p className="text-2xl">
+                        {t("info:your_total_price")}: {price * numOfDays}$
+                      </p>
                     </div>
-                    
+
                     {ownerButtons()}
                     {reservationButton()}
                   </div>
@@ -272,7 +321,7 @@ export default function info(props) {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer hatarent={hatarent} owner_name={owner_name} />
     </div>
   );
 }

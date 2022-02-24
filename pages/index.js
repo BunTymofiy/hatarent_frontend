@@ -8,8 +8,31 @@ import AuthService from "../services/AuthService";
 import MapGL, { Marker, Popup } from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 import AddressHandler from "../helper/AddressHandler";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
-export default function Home({ placeholder }) {
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["home","Footer", "Header"])),
+    },
+  };
+}
+
+export default function Home({ locale }) {
+  const { t } = useTranslation();
+  const hatarent = t("Footer:hatarent");
+  const owner_name = t("Footer:owner_name");
+  const account_information = t("Header:account_information");
+  const become_host = t("Header:become_host");
+  const calendar = t("Header:calendar");
+  const hatarent_logo = t("Header:hatarent");
+  const notifications = t("Header:notifications");
+  const properties = t("Header:properties");
+  const reservations = t("Header:reservations");
+  const sign_in = t("Header:sign_in");
+  const sign_out = t("Header:sign_out");
+  const transactions = t("Header:transactions");
   const [searchInput, setSearchInput] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -56,18 +79,15 @@ export default function Home({ placeholder }) {
   );
   const getSearchInp = useCallback((event) => setSearchInput(event.query), []);
 
- 
   useEffect(async () => {
     setIsMounted(true);
   }, []);
   useEffect(async () => {
     if (isMounted == true) {
-      try{
-      let userFound = await AuthService.getUser();
-      setUser(userFound.data);
-
-      } catch (e) {
-      }
+      try {
+        let userFound = await AuthService.getUser();
+        setUser(userFound.data);
+      } catch (e) {}
     }
   }, [isMounted]);
 
@@ -94,16 +114,17 @@ export default function Home({ placeholder }) {
       },
     });
   };
+
   return (
     <div>
-      <Header user={user} />
+      <Header user={user} account_information={account_information} become_host={become_host} calendar={calendar} notifications={notifications} hatarent={hatarent_logo} properties={properties} reservationsN={reservations} sign_in={sign_in} sign_out={sign_out} transactions={transactions} />
       <main className="h-screen card">
         <div className="flex flex-col items-center  ">
           <div>
             <div className="">
-              <h1 className="text-6xl text-gray-300 font-serif">
-                Welcome to{" "}
-                <span className="font-sans font-semibold">HATARENT</span>
+              <h1 className="text-6xl text-gray-300 mb-3 font-serif">
+                {t("home:welcome")}{" "}
+                <span className="font-sans font-semibold">{t("home:hatarent")}</span>
               </h1>
             </div>
             <div className="flex items-center md:border-2 rounded-full py-2 md:shadow-sm ">
@@ -112,7 +133,7 @@ export default function Home({ placeholder }) {
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="pl-5 bg-transparent outline-none flex-grow text-sm text-white"
                 type="text"
-                placeholder={placeholder || "Start your search"}
+                placeholder={t("home:startYourSearch")}
               />
               <SearchIcon className="h-8 hidden md:inline-flex bg-gray-400 text-white rounded-full p-2 cursor-pointer md:mx-2" />
             </div>
@@ -132,7 +153,7 @@ export default function Home({ placeholder }) {
 
                     <div className="flex items-center border-b mb-4">
                       <h2 className="text-2xl flex-grow font-semibold">
-                        Number of Guests
+                      {t("home:numberOfGuests")}
                       </h2>
                       <UsersIcon className="h-5" />
                       <input
@@ -149,17 +170,17 @@ export default function Home({ placeholder }) {
                         onClick={resetInput}
                         className="flex-grow p-2 btn mr-1 bg-sky-600 text-gray-500"
                       >
-                        Cancel
+                         {t("home:cancel")}
                       </button>
                       <button
                         onClick={search}
                         className="flex-grow p-2 btn text-blue-600"
                       >
-                        Search
+                         {t("home:search")}
                       </button>
                     </div>
                   </section>
-                  <section className="mb-3"> 
+                  <section className="mb-3">
                     <div style={{ height: "100vh" }} className="rounded-t-xl ">
                       <MapGL
                         ref={mapRef}
@@ -193,7 +214,7 @@ export default function Home({ placeholder }) {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer hatarent={hatarent} owner_name={owner_name}/>
     </div>
   );
 }
