@@ -5,9 +5,7 @@ import PropertyService from "../services/PropertyService";
 import AddressHandler from "../helper/AddressHandler";
 import { useRouter } from "next/router";
 
-function PropertyForm(props) {
-  const data = props.data;
-  const user = props.user;
+function PropertyForm({data, user, pathname,add_property, update_property, contact_personP, descriptionP, emailP, max_guest, priceP, titleP}) {
   const [images, setImages] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -76,16 +74,16 @@ function PropertyForm(props) {
     await setData();
   }, [isMounted]);
   const buttons = () => {
-    if(props.pathname === "/update-property"){
+    if(pathname === "/update-property"){
       return (
         <button
         className="btn rounded-md p-1"
         type="submit"
         id="submit"
       >
-        Update Property
+        {update_property}
       </button>)}
-    else if (props.pathname === "/add-property")
+    else if (pathname === "/add-property")
     {
       return(
         <button
@@ -93,7 +91,7 @@ function PropertyForm(props) {
         type="submit"
         id="submit"
       >
-        Add Property
+        {add_property}
       </button>
       )
     }
@@ -112,10 +110,10 @@ function PropertyForm(props) {
       address: AddressHandler.getAddress(addressRow),
       price: price,
     };
-    if (props.pathname === "/update-property") {
+    if (pathname === "/update-property") {
       await PropertyService.updateProperty(uuid, property);
     }
-    if (props.pathname === "/add-property") {
+    if (pathname === "/add-property") {
       await PropertyService.createProperty(property);
     }
     router.push("/host-properties");
@@ -131,7 +129,7 @@ function PropertyForm(props) {
           <form method="PUT" className="relative " onSubmit={handleOnSubmit}>
             <div className="form-group">
               <label htmlFor="title" className="form-label inline-block mb-2">
-                Title
+                {titleP}
               </label>
               <input
                 placeholder="Enter Title"
@@ -146,7 +144,7 @@ function PropertyForm(props) {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="guestLimit">Max Guest</label>
+              <label htmlFor="guestLimit">{max_guest}</label>
               <input
                 placeholder="Enter Guest Number"
                 className="form-control input bg-transparent w-full border-gray-500"
@@ -160,7 +158,7 @@ function PropertyForm(props) {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="price">Price</label>
+              <label htmlFor="price">{priceP}</label>
               <input
                 placeholder="Enter price per night"
                 className="form-control input bg-transparent w-full border-gray-500"
@@ -174,7 +172,7 @@ function PropertyForm(props) {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="contact_person">Contact Person</label>
+              <label htmlFor="contact_person">{contact_personP}</label>
               <input
                 placeholder="Enter Contact Person"
                 className="form-control input bg-transparent w-full border-gray-500"
@@ -188,7 +186,7 @@ function PropertyForm(props) {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{emailP}</label>
               <input
                 placeholder="Enter Email"
                 className="form-control input bg-transparent w-full border-gray-500"
@@ -202,7 +200,7 @@ function PropertyForm(props) {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">{descriptionP}</label>
               <textarea
                 placeholder="Enter Description"
                 className="form-control inputs mb-1 bg-transparent text-gray-200 border-gray-500 focus:border-white focus:bg-transparent border-r-2"

@@ -1,0 +1,16 @@
+{
+  "check-in_date": "Дата заїзду",
+  "check_out_date": "Дата виїзду",
+  "email": "Електронна пошта",
+  "number_of_guests": "Кількість гостей",
+  "property": "Власність",
+  "reservation": "Бронювання",
+  "reserved_by": "Зарезервовано",
+  "total_price": "Загальна сума",
+  "pending": "Очікується",
+  "accept": "Прийняти",
+  "decline": "Відхилити",
+  "paid": "Оплачено",
+  "accepted": "Прийнято",
+  "declined": "Відхилено"
+}

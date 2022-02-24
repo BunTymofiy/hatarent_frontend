@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-function Property(props) {
-  const property = props.property;
+function Property({property,price}) {
   return (
     <div className=" flex cursor-pointer py-7 px-2 pr-4 hover:opacity-80 hover:shadow-lg border-b transition duration-200 ease-out first:border-t bg-gradient-to-t from-purple-800 to-blue-900 p-3 ">
       <div className="relative h-24 w-40 md:h-52 md:w-80 flex flex-shrink-0">
@@ -29,7 +28,7 @@ function Property(props) {
 
         <div className="flex justify-between items-end pt-5">
           <div>
-            <p className="text-lg font-semibold pb-2 lg:text-2xl">Price: {property.price}$</p>
+            <p className="text-lg font-semibold pb-2 lg:text-2xl">{price}: {property.price}$</p>
             {/* <p className=" font-extralight">Total</p> */}
           </div>
         </div>

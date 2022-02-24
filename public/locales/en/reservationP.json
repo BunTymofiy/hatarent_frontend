@@ -1,0 +1,13 @@
+{
+  "contact_person": "Contact Person",
+  "email": "Email",
+  "end_date": "End Date",
+  "make_reservation": "Make Reservation",
+  "number_of_guests": "Number of Guests",
+  "price": "Price",
+  "property": "Property",
+  "reservation": "Reservation",
+  "start_date": "Start Date",
+  "total_amount_of_days": "Total amount of days",
+  "total_price": "Total price"
+}

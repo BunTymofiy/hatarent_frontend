@@ -1,0 +1,14 @@
+{
+  "check-in_date": "Дата заезда",
+  "check_out_date": "Проверить дату",
+  "email": "Эл. адрес",
+  "number_of_guests": "Количество гостей",
+  "property": "Имущество",
+  "reservation": "Бронирование",
+  "reserved_by": "Зарезервировано",
+  "total_price": "Итоговая цена",
+  "pending": "В ожидании",
+  "accept": "Принять",
+  "decline": "Отклонить",
+  "paid": "Оплачено"
+}

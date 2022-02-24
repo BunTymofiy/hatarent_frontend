@@ -1,0 +1,12 @@
+{
+  "address": "Adresse:",
+  "contact_person": "Contact",
+  "description": "La description",
+  "details": "Des détails",
+  "email": "E-mail",
+  "max_guests": "Nombre maximal d'invités",
+  "price": "Prix",
+  "reserve": "réserve",
+  "update_information": "Mettre à jour les informations",
+  "your_total_price": "Votre prix total"
+}

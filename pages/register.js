@@ -7,8 +7,35 @@ import Header from "../components/Header";
 import InputWarningHelper from "../services/InputWarningHelper";
 import { url } from "../constants/urls";
 import Image from "next/image";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        "register",
+        "Footer",
+        "Header",
+      ])),
+    },
+  };
+}
 
 function Register() {
+  const { t } = useTranslation();
+  const hatarent = t("Footer:hatarent");
+  const owner_name = t("Footer:owner_name");
+  const account_information = t("Header:account_information");
+  const become_host = t("Header:become_host");
+  const calendar = t("Header:calendar");
+  const hatarent_logo = t("Header:hatarent");
+  const notifications = t("Header:notifications");
+  const properties = t("Header:properties");
+  const reservations = t("Header:reservations");
+  const sign_in = t("Header:sign_in");
+  const sign_out = t("Header:sign_out");
+  const transactions = t("Header:transactions");
   const postUrl = url + "user/register/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -136,7 +163,19 @@ function Register() {
   const formOnChange = (e) => {};
   return (
     <div>
-      <Header />
+      <Header
+        account_information={account_information}
+        become_host={become_host}
+        calendar={calendar}
+        notifications={notifications}
+        hatarent={hatarent_logo}
+        properties={properties}
+        reservationsN={reservations}
+        sign_in={sign_in}
+        sign_out={sign_out}
+        transactions={transactions}
+      />
+
       <main className="h-screen">
         <div>
           <div className="block p-6 rounded-lg shadow-lg bg-white max-w-md mx-auto">
@@ -147,7 +186,7 @@ function Register() {
                     type="text"
                     className="form-control input w-full border border-solid border-gray-300"
                     id="InputFirstName"
-                    placeholder="First name"
+                    placeholder={t("register:first_name")}
                     value={firstName}
                     onBlur={(e) => InputWarningHelper.onBlur(e)}
                     onChange={onChangeFirstName}
@@ -156,7 +195,7 @@ function Register() {
                     id="InputFirstNameWarning"
                     className="hidden mt-1 text-xs text-red-600"
                   >
-                    Please enter your first name
+                    {t("register:please_enter_first_name")}
                   </small>
                 </div>
                 <div className="form-group mb-6">
@@ -164,7 +203,7 @@ function Register() {
                     type="text"
                     className="form-control input w-full border border-solid border-gray-300"
                     id="InputLastName"
-                    placeholder="Last name"
+                    placeholder={t("register:last_name")}
                     value={lastName}
                     onBlur={(e) => InputWarningHelper.onBlur(e)}
                     onChange={onChangeLastName}
@@ -173,7 +212,7 @@ function Register() {
                     id="InputLastNameWarning"
                     className="hidden mt-1 text-xs text-red-600"
                   >
-                    Please enter your last name
+                    {t("register:please_enter_last_name")}
                   </small>
                 </div>
               </div>
@@ -182,7 +221,7 @@ function Register() {
                   type="email"
                   className="form-control block input w-full border border-solid border-gray-300"
                   id="InputEmail"
-                  placeholder="Email address"
+                  placeholder={t("register:email_address")}
                   value={email}
                   onChange={onChangeEmail}
                   onBlur={(e) => InputWarningHelper.onBlur(e)}
@@ -191,7 +230,7 @@ function Register() {
                   id="InputEmailWarning"
                   className="hidden mt-1 text-xs text-red-600"
                 >
-                  Please enter your email address
+                  {t("register:please_enter_email_address")}
                 </small>
               </div>
               <div className="form-group mb-6">
@@ -199,7 +238,7 @@ function Register() {
                   type="text"
                   className="form-control block input w-full border border-solid border-gray-300"
                   id="InputUsername"
-                  placeholder="User name"
+                  placeholder={t("register:user_name")}
                   value={username}
                   onChange={onChangeUserName}
                   onBlur={(e) => InputWarningHelper.onBlur(e)}
@@ -208,7 +247,7 @@ function Register() {
                   id="InputUsernameWarning"
                   className="hidden mt-1 text-xs text-red-600"
                 >
-                  Please enter your username
+                  {t("register:please_enter_username")}
                 </small>
               </div>
               <div className="flex  mb-5">
@@ -222,7 +261,13 @@ function Register() {
                   />
                 </div>
                 <div className="relative h-20 w-20 rounded-2xl">
-                {image && (<Image src={image} layout="fill" className="rounded-2xl shadow-xl"/> )}
+                  {image && (
+                    <Image
+                      src={image}
+                      layout="fill"
+                      className="rounded-2xl shadow-xl"
+                    />
+                  )}
                 </div>
               </div>
               <div className="form-group mb-6">
@@ -230,7 +275,7 @@ function Register() {
                   type="password"
                   className="form-control block input w-full border border-solid border-gray-300"
                   id="InputPassword"
-                  placeholder="Password"
+                  placeholder={t("register:password")}
                   value={password}
                   onChange={onChangePassword}
                   onBlur={(e) => InputWarningHelper.onBlur(e)}
@@ -239,7 +284,7 @@ function Register() {
                   id="InputPasswordWarning"
                   className="hidden mt-1 text-xs text-red-600"
                 >
-                  Please enter a password
+                  {t("register:please_enter_password")}
                 </small>
               </div>
               <div className="form-group mb-6">
@@ -250,17 +295,17 @@ function Register() {
                   value={confirmPassword}
                   onChange={onChangeConfirmPassword}
                   onBlur={onBlurConfirmPassword}
-                  placeholder="Repeat Password"
+                  placeholder={t("register:repeat_password")}
                 />
                 <small
                   id="InputPasswordConfirmWarning"
                   className="hidden mt-1 text-xs text-red-600"
                 >
-                  Passwords must match
+                  {t("register:passwords_must_match")}
                 </small>
               </div>
               <button type="submit" className="btn btn-primary w-full">
-                Sign up
+                {t("register:sign_up")}
               </button>
             </form>
             <div className="text-center">
@@ -268,13 +313,13 @@ function Register() {
                 className="link link-hover btn-link btn-md"
                 onClick={() => router.push("/login")}
               >
-                Login
+                {t("register:login")}
               </a>
             </div>
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer hatarent={hatarent} owner_name={owner_name} />
     </div>
   );
 }

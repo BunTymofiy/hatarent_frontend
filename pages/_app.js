@@ -5,7 +5,7 @@ import Router from "next/router";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css';
 import "../styles/globals.css";
-
+import { appWithTranslation } from "next-i18next";
 const progress = new ProgressBar({
   size: 4,
   color: "#FE595E",
@@ -29,4 +29,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

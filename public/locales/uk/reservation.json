@@ -1,0 +1,12 @@
+{
+  "address": "Адреса",
+  "check_in_date": "Дата заїзду",
+  "check_out_date": "Дата виїзду",
+  "pay": "Платити",
+  "price": "Ціна",
+  "reservation_number": "Номер бронювання",
+  "accepted": "Прийнято",
+  "declined": "Відхилено",
+  "pending": "Очікується",
+  "paid": "Оплачено"
+}

@@ -8,8 +8,30 @@ import AuthService from "../services/AuthService";
 import NightsService from "../services/NightsService";
 import PropertyService from "../services/PropertyService";
 import ReservationService from "../services/ReservationService";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["home","Footer", "Header", "reservationP"])),
+    },
+  };
+}
 function Reservation() {
+  const { t } = useTranslation();
+  const hatarent = t("Footer:hatarent");
+  const owner_name = t("Footer:owner_name");
+  const account_information = t("Header:account_information");
+  const become_host = t("Header:become_host");
+  const calendar = t("Header:calendar");
+  const hatarent_logo = t("Header:hatarent");
+  const notifications = t("Header:notifications");
+  const properties = t("Header:properties");
+  const reservations = t("Header:reservations");
+  const sign_in = t("Header:sign_in");
+  const sign_out = t("Header:sign_out");
+  const transactions = t("Header:transactions");
   const router = new useRouter();
   const [user, setUser] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -119,50 +141,52 @@ function Reservation() {
   }, [router.isReady]);
   return (
     <div className="h-screen">
-      <Header user={user} />
+            <Header user={user} account_information={account_information} become_host={become_host} calendar={calendar} notifications={notifications} hatarent={hatarent_logo} properties={properties} reservationsN={reservations} sign_in={sign_in} sign_out={sign_out} transactions={transactions} />
+
       <main>
         <div className="card">
           <div className="card-body card glass mx-auto w-96 text-gray-300">
-            <h5 className="card-title">Reservation</h5>
+            <h5 className="card-title">{t('reservationP:reservation')}</h5>
             <p className="card-text">
-              <span className="font-bold">Start Date:</span> {startDate}
+              <span className="font-bold">{t('reservationP:start_date')}:</span> {startDate}
             </p>
             <p className="card-text">
-              <span className="font-bold">End Date:</span> {endDate}
+              <span className="font-bold">{t('reservationP:end_date')}:</span> {endDate}
             </p>
             <p className="card-text">
-              <span className="font-bold">Total amount of days:</span>{" "}
+              <span className="font-bold">{t('reservationP:total_amount_of_days')}:</span>{" "}
               {numOfDays}
             </p>
             <p className="card-text">
-              <span className="font-bold">Number of Guests:</span> {numOfGuests}
+              <span className="font-bold">{t('reservationP:number_of_guests')}:</span> {numOfGuests}
             </p>
             <p className="card-text">
-              <span className="font-bold">Property:</span> {title}
+              <span className="font-bold">{t('reservationP:property')}:</span> {title}
             </p>
             <p className="card-text">
-              <span className="font-bold">Price:</span> {price}
+              <span className="font-bold">{t('reservationP:price')}:</span> {price}
             </p>
             <p className="card-text">
-              <span className="font-bold">Contact Person:</span>{" "}
+              <span className="font-bold">{t('reservationP:contact_person')}:</span>{" "}
               {contact_person}
             </p>
             <p className="card-text">
-              <span className="font-bold">Email:</span> {email}
+              <span className="font-bold">{t('reservationP:email')}:</span> {email}
             </p>
             <div className="card-text">
               <p className="text-xl">
-                <span className="font-bold">Total price:</span>{" "}
+                <span className="font-bold">{t('reservationP:total_price')}:</span>{" "}
                 {Math.round(price * numOfDays)}$
               </p>
             </div>
             <button className="btn mt-5" onClick={createReservationHandler}>
-              Make Reservation
+            {t('reservationP:make_reservation')}
             </button>
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer hatarent={hatarent} owner_name={owner_name}/>
+
     </div>
   );
 }

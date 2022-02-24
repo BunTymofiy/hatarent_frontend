@@ -1,0 +1,12 @@
+{
+  "address": "Адрес",
+  "check_in_date": "Дата заезда",
+  "check_out_date": "Дата выезда",
+  "pay": "Платить",
+  "price": "Цена",
+  "reservation_number": "Номер брони",
+  "accepted": "Принято",
+  "declined": "Отклонено",
+  "pending": "В ожидании",
+  "paid": "Оплачено"
+}

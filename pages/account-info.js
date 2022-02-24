@@ -6,8 +6,31 @@ import Header from "../components/Header";
 import AuthService from "../services/AuthService";
 import Image from "next/image";
 import { UserCircleIcon } from "@heroicons/react/outline";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["Footer", "Header"])),
+    },
+  };
+}
 
 function AccountInfo() {
+  const { t } = useTranslation();
+  const hatarent = t("Footer:hatarent");
+  const owner_name = t("Footer:owner_name");
+  const account_information = t("Header:account_information");
+  const become_host = t("Header:become_host");
+  const calendar = t("Header:calendar");
+  const hatarent_logo = t("Header:hatarent");
+  const notifications = t("Header:notifications");
+  const properties = t("Header:properties");
+  const reservations = t("Header:reservations");
+  const sign_in = t("Header:sign_in");
+  const sign_out = t("Header:sign_out");
+  const transactions = t("Header:transactions");
   const router = new useRouter();
   const [pathname, setPathname] = useState(null);
   const [user, setUser] = useState(null);
@@ -59,7 +82,20 @@ function AccountInfo() {
   }
   return (
     <div className="h-screen">
-      <Header user={user} />
+      <Header
+        user={user}
+        account_information={account_information}
+        become_host={become_host}
+        calendar={calendar}
+        notifications={notifications}
+        hatarent={hatarent_logo}
+        properties={properties}
+        reservationsN={reservations}
+        sign_in={sign_in}
+        sign_out={sign_out}
+        transactions={transactions}
+      />
+
       <main>
         <div className="card ">
           <div className="flex items-center px-4 py-10 bg-cover card">
@@ -88,7 +124,7 @@ function AccountInfo() {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer hatarent={hatarent} owner_name={owner_name} />
     </div>
   );
 }

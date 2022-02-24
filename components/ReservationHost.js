@@ -5,8 +5,7 @@ import React from "react";
 import NightsService from "../services/NightsService";
 import ReservationService from "../services/ReservationService";
 
-function Reservation(props) {
-  const reservation = props.reservation;
+function Reservation({reservation, accept, decline, paid, check_in_date, check_out_date,accepted, declined, price}) {
   const property = reservation.property;
   const router = new useRouter();
   const acceptReservation = async () => {
@@ -40,33 +39,33 @@ function Reservation(props) {
             onClick={acceptReservation}
             className="btn btn-accent capitalize text-gray-300  shadow-xl"
           >
-            Accept
+            {accept}
           </button>
           <button
             onClick={declineReservation}
             className="btn btn-secondary capitalize ml-3 text-gray-300  shadow-xl"
           >
-            Decline
+            {decline}
           </button>
         </div>
       );
     } else if (reservation.status === "accepted") {
       return (
         <button className="btn btn-accent btn-disabled capitalize">
-          {reservation.status}
+          {accepted}
         </button>
       );
     } else if (reservation.status === "declined") {
       return (
         <button className="btn btn-secondary btn-disabled btn-error capitalize">
-          {reservation.status}
+          {declined}
         </button>
       );
     }
     else if (reservation.status === "paid") {
       return (
         <button className="btn btn-accent btn-disabled  capitalize">
-          {reservation.status}
+          {paid}
         </button>
       );
     }
@@ -91,13 +90,13 @@ function Reservation(props) {
         </h4>
         <div className="flex justify-between">
           <p>
-            Check In date:{" "}
+           {check_in_date}:{" "}
             {format(new Date(reservation.checkInDate), "dd MMMM yyyy")}
           </p>
         </div>
         <div className="flex justify-between">
           <p>
-            Check Out date:{" "}
+            {check_out_date}:{" "}
             {format(new Date(reservation.checkOutDate), "dd MMMM yyyy")}
           </p>
         </div>
@@ -110,7 +109,7 @@ function Reservation(props) {
         <div className="flex justify-between items-end pt-5">
           <div>
             <p className="text-lg font-semibold pb-2 lg:text-2xl">
-              Price: {reservation.totalPrice}$
+              {price}: {reservation.totalPrice}$
             </p>
             {/* <p className=" font-extralight">Total</p> */}
           </div>
