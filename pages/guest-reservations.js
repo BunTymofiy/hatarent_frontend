@@ -124,6 +124,7 @@ function GuestReservations() {
           pay={pay}
           pending={pending}
           paid={paid}
+          declined={t("reservation:declined")}
         />
       </div>
     ));

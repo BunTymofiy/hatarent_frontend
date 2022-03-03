@@ -10,5 +10,7 @@
   "pending": "Pending",
   "accept": "Accept",
   "decline": "Decline",
-  "paid": "Paid"
+  "paid": "Paid",
+  "accepted": "Accepted",
+  "declined": "Declined"
 }
