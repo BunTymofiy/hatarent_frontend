@@ -8,7 +8,7 @@ import AddressHandler from "../helper/AddressHandler";
 
 const stripePromise = loadStripe("pk_test_51KSnJYGzTAX7NDbOSi0s27DkSTtk8Rk3vUsnYAmFeTngRsq0To4hvBIy0ou9u2rDgsEKWxxc8r0he3flbFatwrw60020fMtAI4");
 
-function Reservation({reservation,reservation_number,address, accepted, declined, paid, check_in_date, check_out_date, price, pending}) {
+function Reservation({reservation,reservation_number,address, accepted, declined, paid, check_in_date, check_out_date, price, pending, pay}) {
   const property = reservation.property;
   const reservationId = reservation.reservationId;
   const reservationDisplay = reservationId.substring(reservationId.length - 8).toUpperCase();

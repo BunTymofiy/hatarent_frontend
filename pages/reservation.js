@@ -50,6 +50,7 @@ function Reservation() {
   const [loading, setLoading] = useState(true);
   const [price, setPrice] = useState(null);
   const [numOfDays, setNumOfDays] = useState(null);
+  const [clicked, setClicked] = useState(false);
 
   async function getData() {
     try {
@@ -74,6 +75,9 @@ function Reservation() {
     }
   }
   const createReservationHandler = async () => {
+    if(clicked === true) return;
+    setClicked(true);
+    document.getElementById("reserveButton").classList.add("disabled");
     try {
       let reservation = {
         property: {
@@ -179,7 +183,7 @@ function Reservation() {
                 {Math.round(price * numOfDays)}$
               </p>
             </div>
-            <button className="btn mt-5" onClick={createReservationHandler}>
+            <button id="reserveButton" className="btn mt-5" onClick={createReservationHandler}>
             {t('reservationP:make_reservation')}
             </button>
           </div>
